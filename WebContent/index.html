@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>MobileApp</title> 
+	<link rel="apple-touch-icon" href="icones/const_517x517.png"/>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+	      <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
+	
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	<script src="http://code.angularjs.org/angular-1.0.1.min.js"></script>
+
+<script>
+function DataCtrl($scope) 
+{
+	$.ajax(
+			{
+				url: 'http://backplane.cloudfoundry.com/inspection/suivi',
+				// isLocal: false, 
+				async: false,
+				dataType: 'json',
+				crossDomain: true,
+				success: function (i) 
+				{
+				$scope.stats = i;
+				},
+				error: function (jqXHR,textStatus,errorThrown) 
+				{
+					console.log("fail ",jqXHR);
+					console.log("status ",textStatus);
+					console.log("err ",errorThrown);
+				}
+	  		} // fin argument ajax
+	  	);//Fin Ajax
+}//Fin DataCtrl
+
+function InspectionCtrl($scope) 
+{
+	$.ajax(
+			{
+				url: 'http://backplane.cloudfoundry.com/inspection/tous',
+				// isLocal: false, 
+				async: false,
+				dataType: 'json',
+				crossDomain: true,
+				success: function (i) 
+				{
+				$scope.inspections = i;
+				},
+				error: function (jqXHR,textStatus,errorThrown) 
+				{
+					console.log("fail ",jqXHR);
+					console.log("status ",textStatus);
+					console.log("err ",errorThrown);
+				}
+	  		} // fin argument ajax
+	  	);//Fin Ajax
+}//Fin DataCtrl
+
+function activiteCtrl()
+{
+// Wait for PhoneGap to load
+//
+document.addEventListener("deviceready", onDeviceReady, false);
+}
+// PhoneGap is ready
+//
+function onDeviceReady() {
+    playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3");
+}
+
+// Audio player
+//
+var my_media = null;
+var mediaTimer = null;
+
+// Play audio
+//
+function playAudio(src) {
+    // Create Media object from src
+    my_media = new Media(src, onSuccess, onError);
+
+    // Play audio
+    my_media.play();
+
+    // Update my_media position every second
+    if (mediaTimer == null) {
+        mediaTimer = setInterval(function() {
+            // get my_media position
+            my_media.getCurrentPosition(
+                // success callback
+                function(position) {
+                    if (position > -1) {
+                        setAudioPosition((position) + " sec");
+                    }
+                },
+                // error callback
+                function(e) {
+                    console.log("Error getting pos=" + e);
+                    setAudioPosition("Error: " + e);
+                }
+            );
+        }, 1000);
+    }
+}
+
+// Pause audio
+// 
+function pauseAudio() {
+    if (my_media) {
+        my_media.pause();
+    }
+}
+
+// Stop audio
+// 
+function stopAudio() {
+    if (my_media) {
+        my_media.stop();
+    }
+    clearInterval(mediaTimer);
+    mediaTimer = null;
+}
+
+// onSuccess Callback
+//
+function onSuccess() {
+    console.log("playAudio():Audio Success");
+}
+
+// onError Callback 
+//
+function onError(error) {
+    alert('code: '    + error.code    + '\n' + 
+          'message: ' + error.message + '\n');
+}
+
+// Set audio position
+// 
+function setAudioPosition(position) {
+    document.getElementById('audio_position').innerHTML = position;
+}
+
+
+</script>
+
+<style>
+progress, span.progress{
+  width:40%;
+}
+span.progress{
+  border:1px solid black;
+  height:22px;
+  display:inline-block;
+}
+span.progVal {
+  	height:22px;
+	display:inline-block;
+	background-color:#6D6E8A ;
+}
+
+span.nom {
+	width:30%;
+	display:inline-block;}
+
+span.inspPrevues, span.inspDelta {
+	width:5%;
+	display:inline-block;
+	text-align: right;}
+
+span.inspPrevues {
+	padding-left:10%;}
+	
+span[value^="-"] {
+	color:red;}
+
+ul.unstyled li {
+	list-style: none;}
+</style>
+
+</head>
+<body ng-app> 
+
+<!-- Start of first page -->
+<div data-role="page" id="suivi">
+
+	<div data-role="header"  data-position="fixed">
+		<h1>Suivi</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<div ng-controller="DataCtrl">
+    <ul class="unstyled">
+      <li ng-repeat="stat in stats">
+       <span class=nom> {{stat.nom}}</span>
+<!--         <progress max={{stat.inspPrevues}} value={{stat.inspPrevues+stat.inspDelta}} ></progress> -->
+        <span class=progress><span  class=progVal style="width:{{(stat.inspPrevues+stat.inspDelta)/stat.inspPrevues*100}}%"></span></span>
+        <span class=inspPrevues> {{stat.inspPrevues}}</span>
+        <span class=inspDelta value={{stat.inspDelta}}> {{stat.inspDelta}}</span>
+      </li>
+    </ul>
+  </div>
+	</div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed">		
+		<div data-role="navbar"  >
+			<ul>
+				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist" >Suivi</a></li>
+				<li><a href="#inspections" data-icon="check">Inspections</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+
+<!-- Start of second page -->
+<div data-role="page" id="inspections">
+
+	<div data-role="header"  data-position="fixed">
+		<h1>Inspections</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+	<div ng-controller="InspectionCtrl">
+	    <ul data-role="listview" class="ui-link-inherit">
+	      <li ng-repeat="activite in inspections">
+	       <span class=nom> {{stat.nom}}</span>
+	        <h4 class="ui-li-heading">{{activite.numero}}</h4>
+			<p class="ui-li-desc">{{activite.description}}</p>
+			<p class="ui-li-desc">{{activite.datePlanifie}}</p>
+	     <ul>
+				<li><a href="#activite" data-icon="activite">Suivi</a></li>
+		</ul>
+	      </li>
+	    </ul>
+	  </div>
+  
+		
+	</div><!-- /content -->
+
+		<div data-role="footer" data-position="fixed">		
+		<div data-role="navbar"  >
+			<ul>
+				<li><a href="#suivi" data-icon="home">Suivi</a></li>
+				<li><a href="#inspections" data-icon="check" class="ui-btn-active ui-state-persist">Inspections</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+<!-- Start of third page -->
+<div data-role="page" id="activite">
+
+	<div data-role="header"  data-position="fixed">
+		<h1>Suivi</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+	<div ng-controller="ActiviteCtrl">
+		<ul>
+				<li><a onclick=onDeviceReady()>Play</a></li>
+		</ul>
+	  </div>
+	</div><!-- /content -->
+
+	<div data-role="footer" data-position="fixed">		
+		<div data-role="navbar"  >
+			<ul>
+				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist" >Suivi</a></li>
+				<li><a href="#inspections" data-icon="check">Inspections</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+
+</body>
+</html>
