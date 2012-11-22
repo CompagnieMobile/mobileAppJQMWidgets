@@ -8,34 +8,33 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-	      <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
-	
+
 	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 	<script src="http://code.angularjs.org/angular-1.0.1.min.js"></script>
 
 <script>
-function DataCtrl($scope) 
+function DataCtrl($scope)
 {
-	$.ajax(
-			{
-				url: 'http://backplane.cloudfoundry.com/inspection/suivi',
-				// isLocal: false, 
-				async: false,
-				dataType: 'json',
-				crossDomain: true,
-				success: function (i) 
-				{
-				$scope.stats = i;
-				},
-				error: function (jqXHR,textStatus,errorThrown) 
-				{
-					console.log("fail ",jqXHR);
-					console.log("status ",textStatus);
-					console.log("err ",errorThrown);
-				}
-	  		} // fin argument ajax
-	  	);//Fin Ajax
+    $.ajax(
+            {
+  				 url: 'http://backplane.cloudfoundry.com/api/employe/',
+                // isLocal: false,
+                async: false,
+                dataType: 'json',
+                crossDomain: true,
+                success: function (i)
+                {
+                $scope.employes = i;
+                },
+                error: function (jqXHR,textStatus,errorThrown)
+                {
+                    console.log("fail ",jqXHR);
+                    console.log("status ",textStatus);
+                    console.log("err ",errorThrown);
+                }
+              } // fin argument ajax
+          );//Fin Ajax
 }//Fin DataCtrl
 
 function InspectionCtrl($scope) 
@@ -61,90 +60,75 @@ function InspectionCtrl($scope)
 	  	);//Fin Ajax
 }//Fin DataCtrl
 
-function activiteCtrl()
+
+//--- PAGE 
+
+function showCategory( urlObj, options )
 {
-// Wait for PhoneGap to load
-//
-document.addEventListener("deviceready", onDeviceReady, false);
-}
-// PhoneGap is ready
-//
-function onDeviceReady() {
-    playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3");
-}
 
-// Audio player
-//
-var my_media = null;
-var mediaTimer = null;
+	var categoryName = urlObj.hash.replace( /.*category=/, "" ),
 
-// Play audio
-//
-function playAudio(src) {
-    // Create Media object from src
-    my_media = new Media(src, onSuccess, onError);
+	   category = categoryData[ categoryName ],
 
-    // Play audio
-    my_media.play();
+		pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 
-    // Update my_media position every second
-    if (mediaTimer == null) {
-        mediaTimer = setInterval(function() {
-            // get my_media position
-            my_media.getCurrentPosition(
-                // success callback
-                function(position) {
-                    if (position > -1) {
-                        setAudioPosition((position) + " sec");
-                    }
-                },
-                // error callback
-                function(e) {
-                    console.log("Error getting pos=" + e);
-                    setAudioPosition("Error: " + e);
-                }
-            );
-        }, 1000);
-    }
-}
+	if ( category ) {
+		// Get the page we are going to dump our content into.
+		var $page = $( pageSelector ),
 
-// Pause audio
-// 
-function pauseAudio() {
-    if (my_media) {
-        my_media.pause();
-    }
+			// Get the header for the page.
+			$header = $page.children( ":jqmData(role=header)" ),
+
+			// Get the content area element for the page.
+			$content = $page.children( ":jqmData(role=content)" ),
+
+			// The markup we are going to inject into the content
+			// area of the page.
+			markup = "<p>" + category.description + "</p><ul data-role='listview' data-inset='true'>",
+
+			// The array of items for this category.
+			cItems = category.items,
+
+			// The number of items in the category.
+			numItems = cItems.length;
+
+
+		for ( var i = 0; i < numItems; i++ ) {
+			markup += "<li>" + cItems[i].name + "</li>";
+		}
+		markup += "</ul>";
+
+		$header.find( "h1" ).html( category.name );
+
+		$content.html( markup );
+
+		$page.page();
+
+		$content.find( ":jqmData(role=listview)" ).listview();
+
+		options.dataUrl = urlObj.href;
+
+		$.mobile.changePage( $page, options );
+	}
 }
 
-// Stop audio
-// 
-function stopAudio() {
-    if (my_media) {
-        my_media.stop();
-    }
-    clearInterval(mediaTimer);
-    mediaTimer = null;
-}
+$(document).bind( "pagebeforechange", function( e, data ) {
 
-// onSuccess Callback
-//
-function onSuccess() {
-    console.log("playAudio():Audio Success");
-}
+	if ( typeof data.toPage === "string" ) {
+		// category.
 
-// onError Callback 
-//
-function onError(error) {
-    alert('code: '    + error.code    + '\n' + 
-          'message: ' + error.message + '\n');
-}
+		var u = $.mobile.path.parseUrl( data.toPage ),
+			re = /^#category-item/;
+		if ( u.hash.search(re) !== -1 ) {
+			showCategory( u, data.options );
 
-// Set audio position
-// 
-function setAudioPosition(position) {
-    document.getElementById('audio_position').innerHTML = position;
-}
+			e.preventDefault();
+		}
+	}
+});
 
+
+//----END PAGE
 
 </script>
 
@@ -190,17 +174,36 @@ ul.unstyled li {
 
 	<div data-role="header"  data-position="fixed">
 		<h1>Suivi</h1>
+		 <div class="ui-grid-a" >
+              	  <div class="ui-block-a" >
+                    <fieldset data-role="controlgroup" data-mini="true">
+                        <label for="searchinput1">
+                        </label>
+                        <input name="recherche" id="searchinput1" placeholder="Taper ici" value="" type="search" />
+                    </fieldset>
+                    </div>
+                    	 <div class="ui-block-b" align="right">
+                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" >
+                        <input id="Tout" name="" value="Tout" type="button" />              
+                        <input id="Retard" name="" value="Retard" type="button" />         
+                        <input id="Complete" name="" value="Completé" type="button" />
+     
+                    </fieldset>
+                     </div>
+                </div>
+		
 	</div><!-- /header -->
 
 	<div data-role="content">	
 		<div ng-controller="DataCtrl">
-    <ul class="unstyled">
-      <li ng-repeat="stat in stats">
-       <span class=nom> {{stat.nom}}</span>
-<!--         <progress max={{stat.inspPrevues}} value={{stat.inspPrevues+stat.inspDelta}} ></progress> -->
-        <span class=progress><span  class=progVal style="width:{{(stat.inspPrevues+stat.inspDelta)/stat.inspPrevues*100}}%"></span></span>
-        <span class=inspPrevues> {{stat.inspPrevues}}</span>
-        <span class=inspDelta value={{stat.inspDelta}}> {{stat.inspDelta}}</span>
+    <ul data-role="listview" data-divider-theme="b" data-inset="true">
+      <li ng-repeat="stat in employes.data" data-theme="c">
+	        <a href="#category-items?category={{stat.id}}" data-transition="slide">
+	      		<span class=nom> {{stat.nom}}</span>
+	        	<span class=inspDelta>
+	        		<span class="ui-li-count">{{stat.inspDelta}}</span>
+	        	</span>
+	       </a>
       </li>
     </ul>
   </div>
@@ -209,8 +212,8 @@ ul.unstyled li {
 	<div data-role="footer" data-position="fixed">		
 		<div data-role="navbar"  >
 			<ul>
-				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist" >Suivi</a></li>
-				<li><a href="#inspections" data-icon="check">Inspections</a></li>
+				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist"  >Accueil</a></li>
+				<li><a href="#config" data-icon="gear">Configuration</a></li>
 			</ul>
 		</div><!-- /navbar -->
 	</div><!-- /footer -->
@@ -218,63 +221,39 @@ ul.unstyled li {
 
 
 <!-- Start of second page -->
-<div data-role="page" id="inspections">
+<div data-role="page" id="config">
 
 	<div data-role="header"  data-position="fixed">
-		<h1>Inspections</h1>
+		<h1>Configuration</h1>
+
 	</div><!-- /header -->
 
 	<div data-role="content">	
-	<div ng-controller="InspectionCtrl">
-	    <ul data-role="listview" class="ui-link-inherit">
-	      <li ng-repeat="activite in inspections">
-	       <span class=nom> {{stat.nom}}</span>
-	        <h4 class="ui-li-heading">{{activite.numero}}</h4>
-			<p class="ui-li-desc">{{activite.description}}</p>
-			<p class="ui-li-desc">{{activite.datePlanifie}}</p>
-	     <ul>
-				<li><a href="#activite" data-icon="activite">Suivi</a></li>
-		</ul>
-	      </li>
-	    </ul>
-	  </div>
   
-		
 	</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed">		
 		<div data-role="navbar"  >
 			<ul>
-				<li><a href="#suivi" data-icon="home">Suivi</a></li>
-				<li><a href="#inspections" data-icon="check" class="ui-btn-active ui-state-persist">Inspections</a></li>
+				<li><a href="#suivi" data-icon="home"   >Accueil</a></li>
+				<li><a href="#config" data-icon="gear" class="ui-btn-active ui-state-persist">Configuration</a></li>
 			</ul>
 		</div><!-- /navbar -->
 	</div><!-- /footer -->
 </div><!-- /page -->
 
 <!-- Start of third page -->
-<div data-role="page" id="activite">
+<div data-role="page" id="category-items" >
 
 	<div data-role="header"  data-position="fixed">
-		<h1>Suivi</h1>
+		<h1>Configuration</h1>
+
 	</div><!-- /header -->
 
 	<div data-role="content">	
-	<div ng-controller="ActiviteCtrl">
-		<ul>
-				<li><a onclick=onDeviceReady()>Play</a></li>
-		</ul>
-	  </div>
+  
 	</div><!-- /content -->
 
-	<div data-role="footer" data-position="fixed">		
-		<div data-role="navbar"  >
-			<ul>
-				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist" >Suivi</a></li>
-				<li><a href="#inspections" data-icon="check">Inspections</a></li>
-			</ul>
-		</div><!-- /navbar -->
-	</div><!-- /footer -->
 </div><!-- /page -->
 
 
