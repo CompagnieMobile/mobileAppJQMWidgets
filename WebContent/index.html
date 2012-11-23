@@ -14,6 +14,8 @@
 	<script src="http://code.angularjs.org/angular-1.0.1.min.js"></script>
 
 <script>
+var employes=[];
+
 function DataCtrl($scope)
 {
     $.ajax(
@@ -26,6 +28,7 @@ function DataCtrl($scope)
                 success: function (i)
                 {
                 $scope.employes = i;
+                employes=i;
                 },
                 error: function (jqXHR,textStatus,errorThrown)
                 {
@@ -63,16 +66,16 @@ function InspectionCtrl($scope)
 
 //--- PAGE 
 
-function showCategory( urlObj, options )
+function showDetail( urlObj, options )
 {
+	
+	var detailName = urlObj.hash.replace( /.*id=/, "" ),
 
-	var categoryName = urlObj.hash.replace( /.*category=/, "" ),
-
-	   category = categoryData[ categoryName ],
+	  //  id =   employes.data[ detailName ],
 
 		pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 
-	if ( category ) {
+	if ( detailName ) {
 		// Get the page we are going to dump our content into.
 		var $page = $( pageSelector ),
 
@@ -84,21 +87,10 @@ function showCategory( urlObj, options )
 
 			// The markup we are going to inject into the content
 			// area of the page.
-			markup = "<p>" + category.description + "</p><ul data-role='listview' data-inset='true'>",
-
-			// The array of items for this category.
-			cItems = category.items,
-
-			// The number of items in the category.
-			numItems = cItems.length;
+	markup = "<p>" + detailName + "</p><ul data-role='listview' data-inset='true'>";
 
 
-		for ( var i = 0; i < numItems; i++ ) {
-			markup += "<li>" + cItems[i].name + "</li>";
-		}
-		markup += "</ul>";
-
-		$header.find( "h1" ).html( category.name );
+		$header.find( "h1" ).html( "Fiche d'employe" );
 
 		$content.html( markup );
 
@@ -118,9 +110,10 @@ $(document).bind( "pagebeforechange", function( e, data ) {
 		// category.
 
 		var u = $.mobile.path.parseUrl( data.toPage ),
-			re = /^#category-item/;
+			re = /^#employeDetail/;
+
 		if ( u.hash.search(re) !== -1 ) {
-			showCategory( u, data.options );
+			showDetail( u, data.options );
 
 			e.preventDefault();
 		}
@@ -173,12 +166,18 @@ ul.unstyled li {
 <div data-role="page" id="suivi">
 
 	<div data-role="header"  data-position="fixed">
-		<h1>Suivi</h1>
-		 <div class="ui-grid-a" >
+		<h1>Suivi des inspections</h1>
+
+		
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<div ng-controller="DataCtrl">
+   			<ul data-role="listview" data-divider-theme="b" data-inset="true">
+   				<div class="ui-grid-a" >
               	  <div class="ui-block-a" >
                     <fieldset data-role="controlgroup" data-mini="true">
-                        <label for="searchinput1">
-                        </label>
+                  
                         <input name="recherche" id="searchinput1" placeholder="Taper ici" value="" type="search" />
                     </fieldset>
                     </div>
@@ -191,22 +190,16 @@ ul.unstyled li {
                     </fieldset>
                      </div>
                 </div>
-		
-	</div><!-- /header -->
-
-	<div data-role="content">	
-		<div ng-controller="DataCtrl">
-    <ul data-role="listview" data-divider-theme="b" data-inset="true">
-      <li ng-repeat="stat in employes.data" data-theme="c">
-	        <a href="#category-items?category={{stat.id}}" data-transition="slide">
-	      		<span class=nom> {{stat.nom}}</span>
-	        	<span class=inspDelta>
-	        		<span class="ui-li-count">{{stat.inspDelta}}</span>
-	        	</span>
-	       </a>
-      </li>
-    </ul>
-  </div>
+      			<li ng-repeat="stat in employes.data" data-theme="c">
+	        		<a href="#employeDetail?id={{stat.id}}" data-transition="slide">
+		      			<span class=nom> {{stat.nom}}</span>
+		        		<span class=inspDelta>
+		        			<span class="ui-li-count">{{stat.inspDelta}}</span>
+		        		</span>
+	       			</a>
+     			 </li>
+    		</ul>
+ 		 </div>
 	</div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed">		
@@ -243,18 +236,189 @@ ul.unstyled li {
 </div><!-- /page -->
 
 <!-- Start of third page -->
-<div data-role="page" id="category-items" >
+<!-- Début Eric Lepage -->
 
-	<div data-role="header"  data-position="fixed">
-		<h1>Configuration</h1>
 
-	</div><!-- /header -->
+<div data-role="page" id="employeDetail"">
 
-	<div data-role="content">	
-  
-	</div><!-- /content -->
+	<div data-role="collapsible" class="ui-grid-a" data-collapsed="false">
+	
+		<h3>Information pertinente à l'employe</h3>
+		
+		
+		<fieldset class="ui-grid-a">
+		
+		<div class="ui-block-a"><label for="empl">Nom:</label></div>
+		
+		<div class="ui-block-b">
+				<div ng-controller="DataCtrl">
+					<input type="text" name="name" id="basic" value="Marie" />
+				</div>
+				</div>
+		</fieldset>
+		
+	
+		<fieldset class="ui-grid-a">
+		
+		<div class="ui-block-a"><label for="empltel" >Numéro de téléphone:</label></div>
+		
+		<div class="ui-block-b"><input type="tel" name="nametel" id="basic" value="514-333-4444" /></div>
+		
+		</fieldset>
+	
+	
+		<fieldset class="ui-grid-a">
+		
+		<label for="textarea" class="ui-block-a">Remarques:</label>
+		
+		<textarea name="textarea" id="remarques" class="ui-block-b" value="N" /> N'est pas dispo vendredi </textarea>
+		
+		</fieldset>
+	
+	
+		<fieldset class="ui-grid-a">
+		
+		<label for="flip-1" class="ui-block-a">Bonus ?:</label>
+		
+		<div class="ui-block-b"><select name="flip-1" id="bonus-1" data-role="slider" >
+		
+		<option value="non">Non</option>
+		
+		<option value="oui">Oui</option>
+		
+		</select> </div>
+		
+		</fieldset>
+		
+	
+		<div class="ui-grid-a">
+		
+			<div class="ui-block-a">
+			
+				<div data-role="fieldcontain">
+				
+					<label for="radio-choice" class="ui-block-a">Statut de l'employé</label>
+				
+				</div>
+			
+			</div>
+		
+		<div class="ui-block-b">
+		
+			<div data-role="fieldcontain">
+			
+				<fieldset data-role="controlgroup" data-type="horizontal">
+				
+					<input type="radio" name="radio-choice" id="radio-choice-11" value="choice-11" check="checked" />
+					
+					<label for="radio-choice-11">Ext.</label>
+					
+					
+					<input type="radio" name="radio-choice" id="radio-choice-12" value="choice-12"/>
+					
+					<label for="radio-choice-12">Int.</label>
+					
+					
+					<input type="radio" name="radio-choice" id="radio-choice-13" value="choice-13"/>
+					
+					<label for="radio-choice-13">Temp.</label>
+				
+				</fieldset>
+			
+			</div>
+		
+		</div>
+		
+		</div>
+	
+		<div class="ui-grid-a">
+			
+			<div class="ui-block-a">
+			
+				<div data-role="fieldcontain">
+				
+					<label for="slider-2">Salaire:</label>
+				
+				</div> 
+				
+			</div>
+		
+			<div class="ui-block-b">
+			
+				<div data-role="fieldcontain">
+				
+					<input type="range" name="slider-2" id="salaire" value="52000" min="0" max="150000" />
+				
+				</div>
+			
+			</div>
+		
+		</div>
+	
+	<div data-role="fieldcontain">
+	
+		<fieldset data-role="controlgroup">
+		
+		<legend>Équipement:</legend>
+		
+		<input type="checkbox" name="checkbox-eqp" id="checkbox-eqp-1" class="custom" />
+		
+		<label for="checkbox-eqp-1">Casque</label>
+		
+		<input type="checkbox" name="checkbox-eqp" id="checkbox-eqp-2" class="custom" />
+		
+		<label for="checkbox-eqp-2">Lunette</label>
+		
+		<input type="checkbox" name="checkbox-eqp" id="checkbox-eqp-3" class="custom" />
+		
+		<label for="checkbox-eqp-3">Botte</label>
+		
+		
+		</fieldset>
+	
+	</div>
+	
+	
+	<div data-role="fieldcontain">
+	
+		<label for="select-choice-0" class="select">Territoire:</label>
+		
+		<select name="select-choice-0" id="select-choice-0">
+		
+			<option value="LAV">Laurentides</option>
+			
+			<option value="NOR">Montréal</option>
+			
+			<option value="MAT">Nord-Est</option>
+			
+			<option value="IDM">Réseau Autonomes</option>
+			
+			<option value="ORL">Montmorency</option>
+			
+			<option value="SEI">Richelieu</option>
+		
+		</select>
+	
+	</div>
+	
+	</div>
+	
+	
+	<div data-role="collapsible">
+	
+	<h3>Activités</h3>
+	
+	<p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
+	
+	</div>
 
 </div><!-- /page -->
+
+
+<!-- fin eric lepage -->
+
+
+
 
 
 </body>
