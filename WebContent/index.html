@@ -13,7 +13,7 @@
 	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 	<script src="http://code.angularjs.org/angular-1.0.1.min.js"></script>
 
-<script>
+<script><!--
 var employes=[];
 
 function DataCtrl($scope)
@@ -65,44 +65,29 @@ function InspectionCtrl($scope)
 
 
 //--- PAGE 
-
 function showDetail( urlObj, options )
+
 {
-	
-	var detailName = urlObj.hash.replace( /.*id=/, "" ),
-
-	  //  id =   employes.data[ detailName ],
-
-		pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-
-	if ( detailName ) {
-		// Get the page we are going to dump our content into.
-		var $page = $( pageSelector ),
-
-			// Get the header for the page.
-			$header = $page.children( ":jqmData(role=header)" ),
-
-			// Get the content area element for the page.
-			$content = $page.children( ":jqmData(role=content)" ),
-
-			// The markup we are going to inject into the content
-			// area of the page.
-	markup = "<p>" + detailName + "</p><ul data-role='listview' data-inset='true'>";
 
 
-		$header.find( "h1" ).html( "Fiche d'employe" );
+var $detailName = urlObj.hash.replace( /.*id=/, "" );
 
-		$content.html( markup );
+pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 
-		$page.page();
 
-		$content.find( ":jqmData(role=listview)" ).listview();
+var $page = $( pageSelector );
 
-		options.dataUrl = urlObj.href;
 
-		$.mobile.changePage( $page, options );
-	}
+options.dataUrl = urlObj.href;
+
+
+$.mobile.changePage( $page, options );
+
+
+
 }
+
+
 
 $(document).bind( "pagebeforechange", function( e, data ) {
 
@@ -120,7 +105,45 @@ $(document).bind( "pagebeforechange", function( e, data ) {
 	}
 });
 
+var query ;
 
+$("#employeDetail").live("pageshow", function(e, data) 
+		{
+			//var query = "id=";
+
+			query = data.prevPage.context.URL.split("?")[1];;
+			query = query.replace("id=","");
+			
+			//query is now an ID, do stuff with it...
+			document.getElementById("nom").value = employes.data[query-1].nom;
+			document.getElementById("email").value = employes.data[query-1].email;
+			document.getElementById("telephone").value = employes.data[query-1].telephone;
+			document.getElementById("remarque").value = employes.data[query-1].remarque;
+			document.getElementById("bonus").value = employes.data[query-1].bonus;
+			
+			switch (employes.data[query-1].typeEmploye)
+			{
+				case "Interne":
+					document.getElementById("radio-choice-11").checked = true;
+					break;
+				case "Externe":
+					document.getElementById("radio-choice-12").checked = true;
+					break;
+				case "Temporaire":
+					document.getElementById("radio-choice-13").checked = true;
+					break;
+			}
+			
+			document.getElementById("salaire").value = employes.data[query-1].salaire;
+			
+			document.getElementById("casque").checked = employes.data[query-1].casque == "true" ;
+			document.getElementById("lunette").checked = employes.data[query-1].lunette == "true";
+			document.getElementById("botte").checked = employes.data[query-1].botte == "true";
+			
+			document.getElementById("territoire").value = employes.data[query-1].territoire;
+			$('#territoire').selectMenu
+		}
+		);
 //----END PAGE
 
 </script>
@@ -232,7 +255,7 @@ ul.unstyled li {
 				<li><a href="#config" data-icon="gear" class="ui-btn-active ui-state-persist">Configuration</a></li>
 			</ul>
 		</div><!-- /navbar -->
-	</div><!-- /footer -->
+	</div><!-- /footer --> 
 </div><!-- /page -->
 
 <!-- Start of third page -->
@@ -243,166 +266,106 @@ ul.unstyled li {
 
 	<div data-role="collapsible" class="ui-grid-a" data-collapsed="false">
 	
-		<h3>Information pertinente à l'employe</h3>
-		
-		
+		<h3>Information pertinente à l'employé</h3>
 		<fieldset class="ui-grid-a">
-		
-		<div class="ui-block-a"><label for="empl">Nom:</label></div>
-		
-		<div class="ui-block-b">
-				<div ng-controller="DataCtrl">
-					<input type="text" name="name" id="basic" value="Marie" />
-				</div>
-				</div>
+			<div class="ui-block-a"><label for="empl">Nom: </label></div>
+			<div class="ui-block-b">
+					<div ng-controller="DataCtrl">
+						<input type="text" name="name" id="nom" value=""/>
+					</div>
+			</div>
 		</fieldset>
 		
-	
 		<fieldset class="ui-grid-a">
-		
-		<div class="ui-block-a"><label for="empltel" >Numéro de téléphone:</label></div>
-		
-		<div class="ui-block-b"><input type="tel" name="nametel" id="basic" value="514-333-4444" /></div>
-		
+			<div class="ui-block-a"><label for="empltel" >Numéro de téléphone:</label></div>
+			<div class="ui-block-b"><input type="tel" name="nametel" id="telephone" value="514-333-4444" /></div>
 		</fieldset>
 	
-	
-		<fieldset class="ui-grid-a">
-		
-		<label for="textarea" class="ui-block-a">Remarques:</label>
-		
-		<textarea name="textarea" id="remarques" class="ui-block-b" value="N" /> N'est pas dispo vendredi </textarea>
-		
+			<fieldset class="ui-grid-a">
+			<div class="ui-block-a"><label for="email" >Courriel:</label></div>
+			<div class="ui-block-b"><input type="email" name="nametel" id="email" value="514-333-4444" /></div>
 		</fieldset>
 	
+		<fieldset class="ui-grid-a">	
+			<label for="textarea" class="ui-block-a">Remarques:</label>
+			<textarea name="textarea" id="remarque" class="ui-block-b" value="N" /> 
+					N'est pas dispo vendredi 
+			</textarea>
+		</fieldset>
 	
 		<fieldset class="ui-grid-a">
-		
-		<label for="flip-1" class="ui-block-a">Bonus ?:</label>
-		
-		<div class="ui-block-b"><select name="flip-1" id="bonus-1" data-role="slider" >
-		
-		<option value="non">Non</option>
-		
-		<option value="oui">Oui</option>
-		
-		</select> </div>
-		
+			<label for="flip-1" class="ui-block-a">Bonus ?:</label>
+			<div class="ui-block-b">
+				<select name="flip-1" id="bonus" data-role="slider" >
+					<option value="false">Non</option>		
+					<option value="true">Oui</option>
+				</select> 
+			</div>
 		</fieldset>
 		
-	
 		<div class="ui-grid-a">
-		
 			<div class="ui-block-a">
-			
-				<div data-role="fieldcontain">
-				
+				<div data-role="fieldcontain">		
 					<label for="radio-choice" class="ui-block-a">Statut de l'employé</label>
-				
 				</div>
-			
-			</div>
-		
-		<div class="ui-block-b">
-		
-			<div data-role="fieldcontain">
-			
-				<fieldset data-role="controlgroup" data-type="horizontal">
-				
-					<input type="radio" name="radio-choice" id="radio-choice-11" value="choice-11" check="checked" />
-					
-					<label for="radio-choice-11">Ext.</label>
-					
-					
-					<input type="radio" name="radio-choice" id="radio-choice-12" value="choice-12"/>
-					
-					<label for="radio-choice-12">Int.</label>
-					
-					
-					<input type="radio" name="radio-choice" id="radio-choice-13" value="choice-13"/>
-					
-					<label for="radio-choice-13">Temp.</label>
-				
-				</fieldset>
-			
-			</div>
-		
-		</div>
-		
-		</div>
-	
-		<div class="ui-grid-a">
-			
-			<div class="ui-block-a">
-			
-				<div data-role="fieldcontain">
-				
-					<label for="slider-2">Salaire:</label>
-				
-				</div> 
-				
 			</div>
 		
 			<div class="ui-block-b">
-			
-				<div data-role="fieldcontain">
-				
-					<input type="range" name="slider-2" id="salaire" value="52000" min="0" max="150000" />
-				
+				<div data-role="fieldcontain">	
+					<fieldset data-role="controlgroup" data-type="horizontal">
+						<input type="radio" name="radio-choice" id="radio-choice-11" value="choice-11" check="checked" />
+	
+						<label for="radio-choice-11">Ext.</label>
+						<input type="radio" name="radio-choice" id="radio-choice-12" value="choice-12"/>
+						<label for="radio-choice-12">Int.</label>
+						<input type="radio" name="radio-choice" id="radio-choice-13" value="choice-13"/>
+						<label for="radio-choice-13">Temp.</label>
+					</fieldset>
 				</div>
-			
-			</div>
-		
+			</div>	
 		</div>
 	
-	<div data-role="fieldcontain">
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
+				<div data-role="fieldcontain">
+					<label for="slider-2">Salaire:</label>
+				</div> 
+			</div>
+		
+			<div class="ui-block-b">
+				<div data-role="fieldcontain">
+					<input type="range" name="slider-2" id="salaire" value="52000" min="0" max="150000" />
+				</div>
+			</div>
+		</div>
 	
-		<fieldset data-role="controlgroup">
+		<div data-role="fieldcontain">
+			<fieldset data-role="controlgroup">
+				<legend>Équipement:</legend>
+				
+					<input type="checkbox" name="checkbox-eqp" id="casque" class="custom" />
+					<label for="casque">Casque</label>
+					<input type="checkbox" name="checkbox-eqp" id="lunette" class="custom" />
+					<label for="lunette">Lunette</label>
+					<input type="checkbox" name="checkbox-eqp" id="botte" class="custom" />
+					<label for="botte">Botte</label>
+				</fieldset>
+		</div>
 		
-		<legend>Équipement:</legend>
-		
-		<input type="checkbox" name="checkbox-eqp" id="checkbox-eqp-1" class="custom" />
-		
-		<label for="checkbox-eqp-1">Casque</label>
-		
-		<input type="checkbox" name="checkbox-eqp" id="checkbox-eqp-2" class="custom" />
-		
-		<label for="checkbox-eqp-2">Lunette</label>
-		
-		<input type="checkbox" name="checkbox-eqp" id="checkbox-eqp-3" class="custom" />
-		
-		<label for="checkbox-eqp-3">Botte</label>
-		
-		
-		</fieldset>
-	
+		<div data-role="fieldcontain">
+			<label for="select-choice-0" class="select">Territoire:</label>
+			<select name="select-choice-0" id="territoire">
+				<option value="Québec"> Québec </option>
+				<option value="Autre"> Autre </option>
+				<option value="LAV">Laurentides</option>
+				<option value="Montréal">Montréal</option>
+				<option value="MAT">Nord-Est</option>
+				<option value="IDM">Réseau Autonomes</option>
+				<option value="ORL">Montmorency</option>
+				<option value="SEI">Richelieu</option>
+			</select>
+		</div>
 	</div>
-	
-	
-	<div data-role="fieldcontain">
-	
-		<label for="select-choice-0" class="select">Territoire:</label>
-		
-		<select name="select-choice-0" id="select-choice-0">
-		
-			<option value="LAV">Laurentides</option>
-			
-			<option value="NOR">Montréal</option>
-			
-			<option value="MAT">Nord-Est</option>
-			
-			<option value="IDM">Réseau Autonomes</option>
-			
-			<option value="ORL">Montmorency</option>
-			
-			<option value="SEI">Richelieu</option>
-		
-		</select>
-	
-	</div>
-	
-	</div>
-	
 	
 	<div data-role="collapsible">
 	
