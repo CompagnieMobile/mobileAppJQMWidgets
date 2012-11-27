@@ -135,8 +135,8 @@ $("#employeDetail").live("pageshow", function(e, data)
 			}
 			
 			document.getElementById("salaire").value = employes.data[query-1].salaire;
-			console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].casque);
-		
+			
+			//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].casque);
 			document.getElementById("casque").checked = employes.data[query-1].casque ;
 			$('#casque').checkboxradio ("refresh");
 			
@@ -322,7 +322,6 @@ ul.unstyled li {
 				<div data-role="fieldcontain">	
 					<fieldset data-role="controlgroup" data-type="horizontal">
 						<input type="radio" name="radio-choice" id="radio-choice-11" value="choice-11" check="checked" />
-	
 						<label for="radio-choice-11">Ext.</label>
 						<input type="radio" name="radio-choice" id="radio-choice-12" value="choice-12"/>
 						<label for="radio-choice-12">Int.</label>
@@ -347,34 +346,38 @@ ul.unstyled li {
 			</div>
 		</div>
 	
-		<div data-role="fieldcontain">
-			<fieldset data-role="controlgroup">
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
 				<legend>Équipement:</legend>
-				
-					<input type="checkbox" name="checkbox-eqp" id="casque" class="custom" />
-					<label for="casque">Casque</label>
-					<input type="checkbox" name="checkbox-eqp" id="lunette" class="custom" />
-					<label for="lunette">Lunette</label>
-					<input type="checkbox" name="checkbox-eqp" id="botte" class="custom" />
-					<label for="botte">Botte</label>
-				</fieldset>
+			</div> 
+			<div class="ui-block-b">
+				<input type="checkbox" name="checkbox-eqp" id="casque" class="custom" />
+				<label for="casque">Casque</label>
+				<input type="checkbox" name="checkbox-eqp" id="lunette" class="custom" />
+				<label for="lunette">Lunette</label>
+				<input type="checkbox" name="checkbox-eqp" id="botte" class="custom" />
+				<label for="botte">Botte</label>
+			</div>	
 		</div>
 		
-		<div data-role="fieldcontain">
-			<label for="select-choice-0" class="select">Territoire:</label>
-			<select name="select-choice-0" id="territoire">
-				<option value="Québec"> Québec </option>
-				<option value="Autre"> Autre </option>
-				<option value="LAV">Laurentides</option>
-				<option value="Montréal">Montréal</option>
-				<option value="MAT">Nord-Est</option>
-				<option value="IDM">Réseau Autonomes</option>
-				<option value="ORL">Montmorency</option>
-				<option value="SEI">Richelieu</option>
-			</select>
-		</div>
+		<div class="ui-grid-a">
+			<div class="ui-block-a">
+				<label for="select-choice-0" class="select">Territoire:</label>
+			</div>
+			<div class="ui-block-b">
+				<select name="select-choice-0" id="territoire">
+					<option value="Québec"> Québec </option>
+					<option value="Autre"> Autre </option>
+					<option value="LAV">Laurentides</option>
+					<option value="Montréal">Montréal</option>
+					<option value="MAT">Nord-Est</option>
+					<option value="IDM">Réseau Autonomes</option>
+					<option value="ORL">Montmorency</option>
+					<option value="SEI">Richelieu</option>
+				</select>
+			</div>
 	</div>
-	
+	<!-- 
 	<div data-role="collapsible">
 	
 	<h3>Activités</h3>
@@ -382,7 +385,7 @@ ul.unstyled li {
 	<p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
 	
 	</div>
-
+-->
 </div><!-- /page -->
 
 
