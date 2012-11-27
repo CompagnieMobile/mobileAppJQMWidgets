@@ -273,8 +273,13 @@ ul.unstyled li {
 <!-- Début Eric Lepage -->
 
 
-<div data-role="page" id="employeDetail"">
+<div data-role="page" id="employeDetail" data-add-back-btn="true">
 
+	<div data-role="header"  data-position="fixed" data-add-back-btn="true">
+		<h1>Suivi des inspections</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
 	<div data-role="collapsible" class="ui-grid-a" data-collapsed="false">
 	
 		<h3>Information pertinente à l'employé</h3>
@@ -386,8 +391,17 @@ ul.unstyled li {
 	<h3>Activités</h3>
 	
 	<p>I'm the collapsible content. By default I'm closed, but you can click the header to open me.</p>
+		</div>
+	</div><!-- /Content -->
 	
-	</div>
+	<div data-role="footer" data-position="fixed">		
+		<div data-role="navbar"  >
+			<ul>
+				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist"  >Accueil</a></li>
+				<li><a href="#config" data-icon="gear">Configuration</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /footer -->
 -->
 </div><!-- /page -->
 
