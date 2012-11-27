@@ -135,13 +135,21 @@ $("#employeDetail").live("pageshow", function(e, data)
 			}
 			
 			document.getElementById("salaire").value = employes.data[query-1].salaire;
+			console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].casque);
+		
+			document.getElementById("casque").checked = employes.data[query-1].casque ;
+			$('#casque').checkboxradio ("refresh");
 			
-			document.getElementById("casque").checked = employes.data[query-1].casque == "true" ;
-			document.getElementById("lunette").checked = employes.data[query-1].lunette == "true";
-			document.getElementById("botte").checked = employes.data[query-1].botte == "true";
+			//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].lunettes);
+			document.getElementById("lunette").checked = employes.data[query-1].lunettes ;
+			$('#lunette').checkboxradio("refresh");
+			
+			//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].bottes);
+			document.getElementById("botte").checked = employes.data[query-1].bottes ;
+			$('#botte').checkboxradio ("refresh");
 			
 			document.getElementById("territoire").value = employes.data[query-1].territoire;
-			$('#territoire').selectMenu
+			$('#territoire').selectMenu;
 		}
 		);
 //----END PAGE
