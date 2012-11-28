@@ -117,7 +117,7 @@ $("#employeDetail").live("pageshow", function(e, data)
 					}
 			}
 		console.log("query: ", query, " i ", i);
-		//query is now an ID, do stuff with it...
+		//query is now an ID, do stuff with it... test
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
 		document.getElementById("telephone").value = employes.data[query-1].telephone;
