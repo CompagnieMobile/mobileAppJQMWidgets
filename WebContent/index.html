@@ -16,7 +16,6 @@
 	<script src=scripts/employe.js></script>
 
 	<style src=styles/styles.css></style>
-
 </head>
 <body ng-app> 
 
@@ -80,7 +79,13 @@
 	</div><!-- /header -->
 
 	<div data-role="content">	
-  
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a"><label for="url" >URL:</label></div>
+			<div class="ui-block-b"><input type="url" name="url" id="url" onchange="updateUrl(this.value)"/></div>
+			<div class="ui-block-a"><label>Tester la connexion:</label></div>
+			<div class="ui-block-b"><a href="#popupConnexion" data-rel="popup" data-role="button" data-position-to="window">Tester la connexion</a></div>
+			<div data-role="popup" id="popupConnexion"><p>Fonction non implémentée</p></div>
+		</fieldset>
 	</div><!-- /content -->
 
 		<div data-role="footer" data-position="fixed">		
@@ -218,15 +223,6 @@
 		</div>
 	</div><!-- /Content -->
 	
-	<div data-role="footer" data-position="fixed">		
-		<div data-role="navbar"  >
-			<ul>
-				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist"  >Accueil</a></li>
-				<li><a href="#config" data-icon="gear">Configuration</a></li>
-			</ul>
-		</div><!-- /navbar -->
-	</div><!-- /footer -->
-</div>
 </div><!-- /page -->
 
 

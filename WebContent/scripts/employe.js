@@ -1,5 +1,10 @@
 var employes=[];
 
+if(localStorage.getItem('url') == null)
+{
+	localStorage.setItem('url', 'http://backplane.cloudfoundry.com');
+};
+
 function DataCtrl($scope)
 {
 	var value;
@@ -9,7 +14,7 @@ function DataCtrl($scope)
 	{
 	    $.ajax(
 	            {
-	  				url: 'http://backplane.cloudfoundry.com/api/employe/',
+	            	url: localStorage.getItem('url').concat("/api/employe/"),
 	                // isLocal: false,
 	                async: false,
 	                dataType: 'json',
@@ -27,7 +32,7 @@ function DataCtrl($scope)
 	                }
 	              } // fin argument ajax
 	          );//Fin Ajax
-	   	//localStorage.setItem(pos , JSON.stringify(employes));
+	   	localStorage.setItem(pos , JSON.stringify(employes));
 	   	console.log("loc storing: ", JSON.stringify(employes));
 	}
 	else 
@@ -43,7 +48,7 @@ function InspectionCtrl($scope)
 {
 	$.ajax(
 			{
-				url: 'http://backplane.cloudfoundry.com/inspection/tous',
+				url: localStorage.getItem('url').concat("/inspection/tous"),
 				// isLocal: false, 
 				async: false,
 				dataType: 'json',
@@ -64,7 +69,7 @@ function InspectionCtrl($scope)
 
 
 //--- PAGE 
-function showDetail( urlObj, options 
+function showDetail( urlObj, options )
 {
 	var $detailName = urlObj.hash.replace( /.*id=/, "" );
 	pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -99,7 +104,19 @@ $("#employeDetail").live("pageshow", function(e, data)
 
 		query = data.prevPage.context.URL.split("?")[1];;
 		query = query.replace("id=","");
-		
+		//console.log("qu: ", query);
+		for (var i=0; i<employes.data.length; i++)
+			{
+/*				console.log("        employes.data[i].id: ",employes.data[i].id, " ",
+						" employes.data[i].nom ",employes.data[i].nom 
+				)
+				*/			
+				if (employes.data[i].id == query)
+					{
+						query = (i + 1)
+					}
+			}
+		console.log("query: ", query, " i ", i);
 		//query is now an ID, do stuff with it...
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
@@ -138,4 +155,15 @@ $("#employeDetail").live("pageshow", function(e, data)
 		$('#territoire').selectMenu;
 	}
 );
+
+$("#config").live("pageshow", function(e, data) 
+		{
+			document.getElementById("url").value = localStorage.getItem('url');
+		}
+		);
+
+function updateUrl(value) 
+{
+	localStorage.setItem('url', value);
+}
 //----END PAGE
