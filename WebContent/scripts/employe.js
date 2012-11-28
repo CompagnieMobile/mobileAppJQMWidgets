@@ -2,26 +2,41 @@ var employes=[];
 
 function DataCtrl($scope)
 {
-    $.ajax(
-            {
-  				 url: 'http://backplane.cloudfoundry.com/api/employe/',
-                // isLocal: false,
-                async: false,
-                dataType: 'json',
-                crossDomain: true,
-                success: function (i)
-                {
-                $scope.employes = i;
-                employes=i;
-                },
-                error: function (jqXHR,textStatus,errorThrown)
-                {
-                    console.log("fail ",jqXHR);
-                    console.log("status ",textStatus);
-                    console.log("err ",errorThrown);
-                }
-              } // fin argument ajax
-          );//Fin Ajax
+	var value;
+	const pos = "employeJS_ind"
+	value =	localStorage.getItem(pos);
+	if (value == null) 
+	{
+	    $.ajax(
+	            {
+	  				url: 'http://backplane.cloudfoundry.com/api/employe/',
+	                // isLocal: false,
+	                async: false,
+	                dataType: 'json',
+	                crossDomain: true,
+	                success: function (i)
+	                {
+	                	$scope.employes = i;
+	                	employes=i;
+	                },
+	                error: function (jqXHR,textStatus,errorThrown)
+	                {
+	                    console.log("fail ",jqXHR);
+	                    console.log("status ",textStatus);
+	                    console.log("err ",errorThrown);
+	                }
+	              } // fin argument ajax
+	          );//Fin Ajax
+	   	//localStorage.setItem(pos , JSON.stringify(employes));
+	   	console.log("loc storing: ", JSON.stringify(employes));
+	}
+	else 
+	{
+		$scope.employes = JSON.parse(value);
+		employes =  JSON.parse(value);
+		//console.log("loc storage: ", employes);
+	}
+		
 }//Fin DataCtrl
 
 function InspectionCtrl($scope) 
@@ -35,7 +50,7 @@ function InspectionCtrl($scope)
 				crossDomain: true,
 				success: function (i) 
 				{
-				$scope.inspections = i;
+					$scope.inspections = i;
 				},
 				error: function (jqXHR,textStatus,errorThrown) 
 				{
@@ -49,41 +64,28 @@ function InspectionCtrl($scope)
 
 
 //--- PAGE 
-function showDetail( urlObj, options )
-
+function showDetail( urlObj, options 
 {
-
-
-var $detailName = urlObj.hash.replace( /.*id=/, "" );
-
-pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-
-
-var $page = $( pageSelector );
-
-
-options.dataUrl = urlObj.href;
-
-
-$.mobile.changePage( $page, options );
-
-
-
+	var $detailName = urlObj.hash.replace( /.*id=/, "" );
+	pageSelector = urlObj.hash.replace( /\?.*$/, "" );
+	
+	var $page = $( pageSelector );
+	
+	options.dataUrl = urlObj.href;
+	
+	$.mobile.changePage( $page, options );
 }
 
 
 
-$(document).bind( "pagebeforechange", function( e, data ) {
-
+$(document).bind( "pagebeforechange", function( e, data ) 
+{
 	if ( typeof data.toPage === "string" ) {
 		// category.
-
 		var u = $.mobile.path.parseUrl( data.toPage ),
 			re = /^#employeDetail/;
-
 		if ( u.hash.search(re) !== -1 ) {
 			showDetail( u, data.options );
-
 			e.preventDefault();
 		}
 	}
