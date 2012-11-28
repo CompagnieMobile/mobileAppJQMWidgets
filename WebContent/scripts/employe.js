@@ -102,7 +102,7 @@ $("#employeDetail").live("pageshow", function(e, data)
 	{
 		//var query = "id=";
 
-		query = data.prevPage.context.URL.split("?")[1];;
+		query = data.prevPage.context.URL.split("?")[1];
 		query = query.replace("id=","");
 		//console.log("qu: ", query);
 		for (var i=0; i<employes.data.length; i++)
@@ -116,7 +116,7 @@ $("#employeDetail").live("pageshow", function(e, data)
 						query = (i + 1)
 					}
 			}
-		console.log("query: ", query, " i ", i);
+		
 		//query is now an ID, do stuff with it... test
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
