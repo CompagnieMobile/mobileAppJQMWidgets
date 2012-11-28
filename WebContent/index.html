@@ -32,25 +32,18 @@
 
 	<div data-role="content">	
 		<div ng-controller="DataCtrl">
-   			<ul data-role="listview" data-divider-theme="b" data-inset="true">
-   				<div class="ui-grid-a" >
-              	  <div class="ui-block-a" >
-                    <fieldset data-role="controlgroup" data-mini="true">
-                  
-                        <input name="recherche" id="searchinput1" placeholder="Taper ici" value="" type="search" />
-                    </fieldset>
-                    </div>
-                    	 <div class="ui-block-b" align="right">
-                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" >
-                        <input id="Tout" name="" value="Tout" type="button" />              
-                        <input id="Retard" name="" value="Retard" type="button" />         
-                        <input id="Complete" name="" value="Completé" type="button" />
-     
-                    </fieldset>
-                     </div>
-                </div>
-      			<li ng-repeat="stat in employes.data" data-theme="c">
-	        		<a href="#employeDetail?id={{stat.id}}" data-transition="slide">
+   			<ul data-role="listview" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Taper ici..."  >
+         <div align="right">
+         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
+	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" ng-show="FilterData()" />
+	         	<label for="radio-view-a">Tout</label>
+	         	<input type="radio" name="radio-view" id="radio-view-b" value="late" ng-show="FilterData()" />
+	         	<label for="radio-view-b">Retard</label>
+	         	<input type="radio" name="radio-view" id="radio-view-c" value="complete" ng-show="FilterData()" />
+	         	<label for="radio-view-c">Complete</label>
+	    </fieldset>     </div>     
+      			<li ng-repeat="stat in employes.data" data-theme="c"  >
+	        		<a href="#employeDetail?id={{stat.id}}" data-transition="slide" > 
 		      			<span class=nom> {{stat.nom}}</span>
 		        		<span class=inspDelta>
 		        			<span class="ui-li-count">{{stat.inspDelta}}</span>
@@ -60,6 +53,7 @@
     		</ul>
  		 </div>
 	</div><!-- /content -->
+
 
 	<div data-role="footer" data-position="fixed">		
 		<div data-role="navbar"  >
