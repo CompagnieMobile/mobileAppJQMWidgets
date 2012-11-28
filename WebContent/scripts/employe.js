@@ -27,7 +27,7 @@ function DataCtrl($scope)
 	                }
 	              } // fin argument ajax
 	          );//Fin Ajax
-	   	//localStorage.setItem(pos , JSON.stringify(employes));
+	   	localStorage.setItem(pos , JSON.stringify(employes));
 	   	console.log("loc storing: ", JSON.stringify(employes));
 	}
 	else 
@@ -64,7 +64,7 @@ function InspectionCtrl($scope)
 
 
 //--- PAGE 
-function showDetail( urlObj, options 
+function showDetail( urlObj, options )
 {
 	var $detailName = urlObj.hash.replace( /.*id=/, "" );
 	pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -100,6 +100,14 @@ $("#employeDetail").live("pageshow", function(e, data)
 		query = data.prevPage.context.URL.split("?")[1];;
 		query = query.replace("id=","");
 		
+		for (var i=1; i<employes.data.length; i++)
+			{
+				if (employes.data[i].id == query)
+					{
+						query = i
+					}
+			}
+		console.log("query: ");
 		//query is now an ID, do stuff with it...
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
