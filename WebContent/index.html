@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>MobileApp</title> 
+	<meta charset="ISO-8859-1">
+	<title>MobileApp</title> 
 	<link rel="apple-touch-icon" href="icones/const_517x517.png"/>
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -11,184 +11,11 @@
 
 	<script src=scripts/jquery-1.8.3.min.js></script>
 	<script src=scripts/jquery.mobile-1.2.0.min.js></script>
-	<script src="scripts/angular-1.0.1.min.js"></script>
+	<script src=scripts/angular-1.0.1.min.js></script>
 
-<script>
-var employes=[];
+	<script src=scripts/employe.js></script>
 
-function DataCtrl($scope)
-{
-    $.ajax(
-            {
-  				 url: 'http://backplane.cloudfoundry.com/api/employe/',
-                // isLocal: false,
-                async: false,
-                dataType: 'json',
-                crossDomain: true,
-                success: function (i)
-                {
-                $scope.employes = i;
-                employes=i;
-                },
-                error: function (jqXHR,textStatus,errorThrown)
-                {
-                    console.log("fail ",jqXHR);
-                    console.log("status ",textStatus);
-                    console.log("err ",errorThrown);
-                }
-              } // fin argument ajax
-          );//Fin Ajax
-}//Fin DataCtrl
-
-function InspectionCtrl($scope) 
-{
-	$.ajax(
-			{
-				url: 'http://backplane.cloudfoundry.com/inspection/tous',
-				// isLocal: false, 
-				async: false,
-				dataType: 'json',
-				crossDomain: true,
-				success: function (i) 
-				{
-				$scope.inspections = i;
-				},
-				error: function (jqXHR,textStatus,errorThrown) 
-				{
-					console.log("fail ",jqXHR);
-					console.log("status ",textStatus);
-					console.log("err ",errorThrown);
-				}
-	  		} // fin argument ajax
-	  	);//Fin Ajax
-}//Fin DataCtrl
-
-
-//--- PAGE 
-function showDetail( urlObj, options )
-
-{
-
-
-var $detailName = urlObj.hash.replace( /.*id=/, "" );
-
-pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-
-
-var $page = $( pageSelector );
-
-
-options.dataUrl = urlObj.href;
-
-
-$.mobile.changePage( $page, options );
-
-
-
-}
-
-
-
-$(document).bind( "pagebeforechange", function( e, data ) {
-
-	if ( typeof data.toPage === "string" ) {
-		// category.
-
-		var u = $.mobile.path.parseUrl( data.toPage ),
-			re = /^#employeDetail/;
-
-		if ( u.hash.search(re) !== -1 ) {
-			showDetail( u, data.options );
-
-			e.preventDefault();
-		}
-	}
-});
-
-var query ;
-
-$("#employeDetail").live("pageshow", function(e, data) 
-		{
-			//var query = "id=";
-
-			query = data.prevPage.context.URL.split("?")[1];;
-			query = query.replace("id=","");
-			
-			//query is now an ID, do stuff with it...
-			document.getElementById("nom").value = employes.data[query-1].nom;
-			document.getElementById("email").value = employes.data[query-1].email;
-			document.getElementById("telephone").value = employes.data[query-1].telephone;
-			document.getElementById("remarque").value = employes.data[query-1].remarque;
-			document.getElementById("bonus").value = employes.data[query-1].bonus;
-			
-			switch (employes.data[query-1].typeEmploye)
-			{
-				case "Interne":
-					document.getElementById("radio-choice-11").checked = true;
-					break;
-				case "Externe":
-					document.getElementById("radio-choice-12").checked = true;
-					break;
-				case "Temporaire":
-					document.getElementById("radio-choice-13").checked = true;
-					break;
-			}
-			
-			document.getElementById("salaire").value = employes.data[query-1].salaire;
-			
-			//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].casque);
-			document.getElementById("casque").checked = employes.data[query-1].casque ;
-			$('#casque').checkboxradio ("refresh");
-			
-			//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].lunettes);
-			document.getElementById("lunette").checked = employes.data[query-1].lunettes ;
-			$('#lunette').checkboxradio("refresh");
-			
-			//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].bottes);
-			document.getElementById("botte").checked = employes.data[query-1].bottes ;
-			$('#botte').checkboxradio ("refresh");
-			
-			document.getElementById("territoire").value = employes.data[query-1].territoire;
-			$('#territoire').selectMenu;
-		}
-		);
-//----END PAGE
-
-</script>
-
-<style>
-progress, span.progress{
-  width:40%;
-}
-span.progress{
-  border:1px solid black;
-  height:22px;
-  display:inline-block;
-}
-span.progVal {
-  	height:22px;
-	display:inline-block;
-	background-color:#6D6E8A ;
-}
-
-span.nom {
-	width:30%;
-	display:inline-block;}
-
-span.inspPrevues, span.inspDelta {
-	width:5%;
-	display:inline-block;
-	text-align: right;}
-
-span.inspPrevues {
-	padding-left:10%;}
-	
-span[value^="-"] {
-	color:red;}
-
-ul.unstyled li {
-	list-style: none;}
-</style>
+	<style src=styles/styles.css></style>
 
 </head>
 <body ng-app> 

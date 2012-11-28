@@ -1,0 +1,31 @@
+progress, span.progress{
+  width:40%;
+}
+span.progress{
+  border:1px solid black;
+  height:22px;
+  display:inline-block;
+}
+span.progVal {
+  	height:22px;
+	display:inline-block;
+	background-color:#6D6E8A ;
+}
+
+span.nom {
+	width:30%;
+	display:inline-block;}
+
+span.inspPrevues, span.inspDelta {
+	width:5%;
+	display:inline-block;
+	text-align: right;}
+
+span.inspPrevues {
+	padding-left:10%;}
+	
+span[value^="-"] {
+	color:red;}
+
+ul.unstyled li {
+	list-style: none;}
