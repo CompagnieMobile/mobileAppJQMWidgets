@@ -99,15 +99,19 @@ $("#employeDetail").live("pageshow", function(e, data)
 
 		query = data.prevPage.context.URL.split("?")[1];;
 		query = query.replace("id=","");
-		
-		for (var i=1; i<employes.data.length; i++)
+		//console.log("qu: ", query);
+		for (var i=0; i<employes.data.length; i++)
 			{
+/*				console.log("        employes.data[i].id: ",employes.data[i].id, " ",
+						" employes.data[i].nom ",employes.data[i].nom 
+				)
+				*/			
 				if (employes.data[i].id == query)
 					{
-						query = i
+						query = (i + 1)
 					}
 			}
-		console.log("query: ");
+		console.log("query: ", query, " i ", i);
 		//query is now an ID, do stuff with it...
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
