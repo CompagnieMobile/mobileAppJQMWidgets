@@ -5,6 +5,75 @@ if(localStorage.getItem('url') == null)
 	localStorage.setItem('url', 'http://backplane.cloudfoundry.com');
 };
 
+var debug;
+$(document).ready(function(){
+	$('select').change(
+		function(event) 
+		{
+			debug = event;
+			if (event.target.id = "bonus")
+			{
+				console.log("bonus: ",employes.data[query - 1][event.target.id] , " versus ", (event.target.value == "true"))
+				
+				employes.data[query - 1][event.target.id]  = (event.target.value == "true") ;
+			}
+			else 
+			{
+				console.log("selection: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value)
+				employes.data[query - 1][event.target.id]  = event.target.value;
+					
+				
+			}
+		}
+	);
+
+	$('input').change(
+		function(event) 
+		{
+			console.log(event.target.id)
+			if ( ["interne","externe","temporaire"].indexOf(event.target.id) >= 0)
+			{
+				newVal = event.target.id
+				var newVal = newVal[0].toUpperCase().concat(newVal.substr(1,newVal.length));
+				console.log("typeEmpl: ",employes.data[query - 1]["typeEmploye"] , " versus ", newVal)
+				employes.data[query - 1]["typeEmploye"] = newVal;
+				
+			}
+			else if ( ["casque","bottes","lunettes"].indexOf(event.target.id) >= 0)
+			{
+				console.log("equip: ",employes.data[query - 1][event.target.id] , " versus ", event.target.checked);
+				employes.data[query - 1][event.target.id] = event.target.checked;
+			}
+			else 
+			{
+				debug = event
+				console.log("input change: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value);
+				employes.data[query - 1][event.target.id] = event.target.value;
+			}
+		}
+	);
+	
+	$('textarea').change(
+		function(event) 
+		{
+			debug = event ;
+			console.log("texte: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value) ;
+			employes.data[query - 1][event.target.id] = event.target.value ;
+		}
+	);
+});
+
+$( document ).live( 'pageinit',function(event)
+{
+	$("#salaire").on("slidestop",
+			function(event){
+				debug = event;
+				console.log("1ci slide: ",employes.data[query - 1][event.target.id]," versus ",event.target.value) ;
+				employes.data[query - 1][event.target.id] = event.target.value ;
+		}
+	);
+});
+
 function DataCtrl($scope)
 {
 	var value;
@@ -124,17 +193,21 @@ $("#employeDetail").live("pageshow", function(e, data)
 		document.getElementById("remarque").value = employes.data[query-1].remarque;
 		document.getElementById("bonus").value = employes.data[query-1].bonus;
 		
-		switch (employes.data[query-1].typeEmploye)
+		switch (employes.data[query-1].typeEmploye.toLowerCase())
 		{
-			case "Interne":
-				document.getElementById("radio-choice-11").checked = true;
+			case "interne":
+				document.getElementById("interne").checked = true;
+				$('#interne').checkboxradio ("refresh");
 				break;
-			case "Externe":
-				document.getElementById("radio-choice-12").checked = true;
+			case "externe":
+				document.getElementById("externe").checked = true;
+				$('#externe').checkboxradio ("refresh");
 				break;
-			case "Temporaire":
-				document.getElementById("radio-choice-13").checked = true;
+			case "temporaire":
+				document.getElementById("temporaire").checked = true;
+				$('#temporaire').checkboxradio ("refresh");
 				break;
+
 		}
 		
 		document.getElementById("salaire").value = employes.data[query-1].salaire;
@@ -144,12 +217,12 @@ $("#employeDetail").live("pageshow", function(e, data)
 		$('#casque').checkboxradio ("refresh");
 		
 		//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].lunettes);
-		document.getElementById("lunette").checked = employes.data[query-1].lunettes ;
+		document.getElementById("lunettes").checked = employes.data[query-1].lunettes ;
 		$('#lunette').checkboxradio("refresh");
 		
 		//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].bottes);
-		document.getElementById("botte").checked = employes.data[query-1].bottes ;
-		$('#botte').checkboxradio ("refresh");
+		document.getElementById("bottes").checked = employes.data[query-1].bottes ;
+		$('#bottes').checkboxradio ("refresh");
 		
 		document.getElementById("territoire").value = employes.data[query-1].territoire;
 		$('#territoire').selectMenu;

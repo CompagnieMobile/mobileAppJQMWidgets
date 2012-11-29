@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!--<meta charset="ISO-8859-1">-->
-	<meta charset="windows-1252"/>
+	<meta charset="ISO-8859-1">
+
 	
 	<title>MobileApp</title> 
 	<link rel="apple-touch-icon" href="icones/const_517x517.png"/>
@@ -154,12 +154,12 @@
 			<div class="ui-block-b">
 				<div data-role="fieldcontain">	
 					<fieldset data-role="controlgroup" data-type="horizontal">
-						<input type="radio" name="radio-choice" id="radio-choice-11" value="choice-11" check="checked" />
-						<label for="radio-choice-11">Ext.</label>
-						<input type="radio" name="radio-choice" id="radio-choice-12" value="choice-12"/>
-						<label for="radio-choice-12">Int.</label>
-						<input type="radio" name="radio-choice" id="radio-choice-13" value="choice-13"/>
-						<label for="radio-choice-13">Temp.</label>
+						<input type="radio" name="radio-choice" id="externe" value="externe" check="checked" />
+						<label for="externe">Ext.</label>
+						<input type="radio" name="radio-choice" id="interne" value="interne"/>
+						<label for="interne">Int.</label>
+						<input type="radio" name="radio-choice" id="temporaire" value="temporaire"/>
+						<label for="temporaire">Temp.</label>
 					</fieldset>
 				</div>
 			</div>	
@@ -186,10 +186,10 @@
 			<div class="ui-block-b">
 				<input type="checkbox" name="checkbox-eqp" id="casque" class="custom" />
 				<label for="casque">Casque</label>
-				<input type="checkbox" name="checkbox-eqp" id="lunette" class="custom" />
-				<label for="lunette">Lunette</label>
-				<input type="checkbox" name="checkbox-eqp" id="botte" class="custom" />
-				<label for="botte">Botte</label>
+				<input type="checkbox" name="checkbox-eqp" id="lunettes" class="custom" />
+				<label for="lunettes">Lunette</label>
+				<input type="checkbox" name="checkbox-eqp" id="bottes" class="custom" />
+				<label for="bottes">Botte</label>
 			</div>	
 		</div>
 		
@@ -198,7 +198,7 @@
 				<label for="select-choice-0" class="select">Territoire:</label>
 			</div>
 			<div class="ui-block-b">
-				<select name="select-choice-0" id="territoire">
+				<select name="select-choice-0" id="territoire" class="target">
 					<option value="Québec"> Québec </option>
 					<option value="Autre"> Autre </option>
 					<option value="LAV">Laurentides</option>
@@ -210,6 +210,13 @@
 				</select>
 			</div>
 	</div>
+	<!--
+	<script>
+    $("select").change(function () {
+        console.log("test3");
+        })
+        .change();
+</script>-->
 	<!-- 
 	<div data-role="collapsible">
 	
