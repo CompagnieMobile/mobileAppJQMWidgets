@@ -136,7 +136,27 @@ function InspectionCtrl($scope)
 	  	);//Fin Ajax
 }//Fin DataCtrl
 
+function dataFilter(filter)
+{
+	var affichage=false;
+	console.log("dataFilter", filter)
+	if (document.getElementById("radio-view-b").checked == true && filter <0)
+		{
+		
+		affichage= true;
+		}	
+	else if (document.getElementById("radio-view-c").checked == true && filter >=0)
+		{
+		affichage= true;
+		}
+	else if (document.getElementById("radio-view-a").checked == true)
+		{
+		affichage= true;
+	}
+	$("#liste").listview("refresh");
+	return affichage;
 
+}
 //--- PAGE 
 function showDetail( urlObj, options )
 {

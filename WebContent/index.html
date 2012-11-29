@@ -32,17 +32,17 @@
 
 	<div data-role="content">	
 		<div ng-controller="DataCtrl">
-   			<ul data-role="listview" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Taper ici..."  >
+   			<ul data-role="listview" id="liste" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Taper ici..."  >
          <div align="right">
          <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
-	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" ng-show="FilterData()" />
+	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" checked="true"  />
 	         	<label for="radio-view-a">Tout</label>
-	         	<input type="radio" name="radio-view" id="radio-view-b" value="late" ng-show="FilterData()" />
+	         	<input type="radio" name="radio-view" id="radio-view-b" value="late" />
 	         	<label for="radio-view-b">Retard</label>
-	         	<input type="radio" name="radio-view" id="radio-view-c" value="complete" ng-show="FilterData()" />
+	         	<input type="radio" name="radio-view" id="radio-view-c" value="complete"  />
 	         	<label for="radio-view-c">Complete</label>
 	    </fieldset>     </div>     
-      			<li ng-repeat="stat in employes.data" data-theme="c"  >
+      			<li ng-repeat="stat in employes.data" data-theme="c"  ng-show="true">
 	        		<a href="#employeDetail?id={{stat.id}}" data-transition="slide" > 
 		      			<span class=nom> {{stat.nom}}</span>
 		        		<span class=inspDelta>
