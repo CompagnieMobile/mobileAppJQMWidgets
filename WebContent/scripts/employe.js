@@ -102,7 +102,7 @@ function DataCtrl($scope)
 	              } // fin argument ajax
 	          );//Fin Ajax
 	   	localStorage.setItem(pos , JSON.stringify(employes));
-	   	console.log("loc storing: ", JSON.stringify(employes));
+	   	//console.log("loc storing: ", JSON.stringify(employes));
 	}
 	else 
 	{
@@ -252,9 +252,40 @@ $("#employeDetail").live("pageshow", function(e, data)
 $("#config").live("pageshow", function(e, data) 
 		{
 			document.getElementById("url").value = localStorage.getItem('url');
+			document.getElementById('popupText').innerHTML = checkConnection();	
 		}
 		);
 
+function checkConnection()
+{
+	//console.log("Connexion: " + navigator.connection);
+	if (navigator.connection != null)
+	{
+		//console.log("Connexion Type: " + navigator.connection.type);
+		var networkState = navigator.connection.type;
+		var states = {};
+        states[Connection.UNKNOWN]  = 'Connexion inconnue';
+        states[Connection.ETHERNET] = 'Connexion Ethernet';
+        states[Connection.WIFI]     = 'Connexion WiFi';
+        states[Connection.CELL_2G]  = 'Connexion Cell 2G';
+        states[Connection.CELL_3G]  = 'Connexion Cell 3G';
+        states[Connection.CELL_4G]  = 'Connexion Cell 4G';
+        states[Connection.NONE]     = 'Aucune connexion';
+        
+        return states[networkState];
+	}
+	else
+	{
+		if(navigator.onLine)
+		{
+			return 'Connexion active';
+		}
+		else
+		{
+			return 'Aucune connexion';
+		}
+	}		
+}
 function updateUrl(value) 
 {
 	localStorage.setItem('url', value);
