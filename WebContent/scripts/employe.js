@@ -47,8 +47,8 @@ $(document).ready(function(){
 			else 
 			{
 				debug = event
-				console.log("input change: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value);
-				employes.data[query - 1][event.target.id] = event.target.value;
+				//console.log("input change: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value);
+				//employes.data[query - 1][event.target.id] = event.target.value;
 			}
 		}
 	);
@@ -157,6 +157,7 @@ function dataFilter(filter)
 	return affichage;
 
 }
+
 //--- PAGE 
 function showDetail( urlObj, options )
 {
