@@ -6,7 +6,7 @@
         version   = "1.0.0">
 
 
-    <name>config</name>
+    <name>JQMWidget</name>
 
     <description>
         Configuration de l'application JQMWidget. 
