@@ -35,7 +35,7 @@ $(document).ready(function(){
 			{
 				newVal = event.target.id
 				var newVal = newVal[0].toUpperCase().concat(newVal.substr(1,newVal.length));
-				console.log("typeEmpl: ",employes.data[query - 1]["typeEmploye"] , " versus ", newVal)
+				//console.log("typeEmpl: ",employes.data[query - 1]["typeEmploye"] , " versus ", newVal)
 				employes.data[query - 1]["typeEmploye"] = newVal;
 				
 			}
@@ -106,7 +106,7 @@ function DataCtrl($scope)
 	}
 	else 
 	{
-		$scope.employes = JSON.parse(value);
+		//$scope.employes = JSON.parse(value);
 		employes =  JSON.parse(value);
 		//console.log("loc storage: ", employes);
 	}
@@ -136,26 +136,39 @@ function InspectionCtrl($scope)
 	  	);//Fin Ajax
 }//Fin DataCtrl
 
-function dataFilter(filter)
+function dataFilter()
 {
 	var affichage=false;
-	console.log("dataFilter", filter)
-	if (document.getElementById("radio-view-b").checked == true && filter <0)
-		{
-		
-		affichage= true;
-		}	
-	else if (document.getElementById("radio-view-c").checked == true && filter >=0)
-		{
-		affichage= true;
-		}
-	else if (document.getElementById("radio-view-a").checked == true)
-		{
-		affichage= true;
+	if (document.getElementById("radio-view-b").checked == true)
+	{
+		for(var i=0; i<employes.data.length; i++)
+    	{
+			var employe = employes.data[i];
+			if(employe.inspDelta < 0)
+				document.getElementById("employe-li" + employe.id).style.display = 'block';
+			else
+				document.getElementById("employe-li" + employe.id).style.display = 'none';
+    	}
+	}	
+	else if (document.getElementById("radio-view-c").checked == true)
+	{
+		for(var i=0; i<employes.data.length; i++)
+    	{
+			var employe = employes.data[i];
+			if(employe.inspDelta >= 0)
+				document.getElementById("employe-li" + employe.id).style.display = 'block';
+			else
+				document.getElementById("employe-li" + employe.id).style.display = 'none';
+    	}
 	}
-	$("#liste").listview("refresh");
-	return affichage;
-
+	else if (document.getElementById("radio-view-a").checked == true)
+	{
+		for(var i=0; i<employes.data.length; i++)
+    	{
+			var employe = employes.data[i];
+			document.getElementById("employe-li" + employe.id).style.display = 'block';
+    	}
+	}
 }
 
 //--- PAGE 
@@ -260,10 +273,10 @@ $("#config").live("pageshow", function(e, data)
 function checkConnection()
 {
 	//console.log("Connexion: " + navigator.connection);
-	if (navigator.connection != null)
+	if (navigator.network != null)
 	{
 		//console.log("Connexion Type: " + navigator.connection.type);
-		var networkState = navigator.connection.type;
+		var networkState = navigator.network.connection.type;
 		var states = {};
         states[Connection.UNKNOWN]  = 'Connexion inconnue';
         states[Connection.ETHERNET] = 'Connexion Ethernet';

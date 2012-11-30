@@ -32,27 +32,31 @@
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<div ng-controller="DataCtrl">
+		<!--  <div ng-controller="DataCtrl">-->
    			<ul data-role="listview" id="liste" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Taper ici..."  >
          <div align="right">
          <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
-	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" checked="true"  />
+	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" checked="true"  onclick="dataFilter()"/>
 	         	<label for="radio-view-a">Tout</label>
-	         	<input type="radio" name="radio-view" id="radio-view-b" value="late" />
+	         	<input type="radio" name="radio-view" id="radio-view-b" value="late" onclick="dataFilter()"/>
 	         	<label for="radio-view-b">Retard</label>
-	         	<input type="radio" name="radio-view" id="radio-view-c" value="complete"  />
+	         	<input type="radio" name="radio-view" id="radio-view-c" value="complete"  onclick="dataFilter()"/>
 	         	<label for="radio-view-c">Complete</label>
-	    </fieldset>     </div>     
-      			<li ng-repeat="stat in employes.data" data-theme="c"  ng-show="true">
-	        		<a href="#employeDetail?id={{stat.id}}" data-transition="slide" > 
-		      			<span class=nom> {{stat.nom}}</span>
-		        		<span class=inspDelta>
-		        			<span class="ui-li-count" value={{stat.inspDelta}}>{{stat.inspDelta}}</span>
-		        		</span>
-	       			</a>
-     			 </li>
-    		</ul>
- 		 </div>
+	    </fieldset>     
+	    </div>     
+	    <script>
+	    	DataCtrl();
+	    	for(var i=0; i<employes.data.length; i++)
+	    	{
+	    		var stat = employes.data[i];
+	    		document.write("<li id='employe-li" + stat.id + "' data-theme='c'>");
+	    		document.write("<a href='#employeDetail?id=" + stat.id + "' data-transition='slide' >");
+	    		document.write("<span class=nom>" + stat.nom + "</span>");
+	    		document.write("<span class='inspDelta ui-li-count' value=" + stat.inspDelta + ">" + stat.inspDelta + "</span>");
+	    		document.write("</a></li>");
+	    	};
+	    </script>
+   		</ul>
 	</div><!-- /content -->
 
 
