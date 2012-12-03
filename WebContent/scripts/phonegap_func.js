@@ -23,7 +23,7 @@ function onResume()
 //Handle the online event
 function onOnline() 
 {
-	navigator.notification.vibrate(500);
+	navigator.notification.beep(1);
 }
 
 //Handle the offline event
