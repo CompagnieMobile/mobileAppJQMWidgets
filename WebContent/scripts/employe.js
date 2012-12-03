@@ -90,7 +90,7 @@ function DataCtrl($scope)
 	                crossDomain: true,
 	                success: function (i)
 	                {
-	                	$scope.employes = i;
+	                	//$scope.employes = i;
 	                	employes=i;
 	                },
 	                error: function (jqXHR,textStatus,errorThrown)
