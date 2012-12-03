@@ -13,13 +13,13 @@ $(document).ready(function(){
 			debug = event;
 			if (event.target.id = "bonus")
 			{
-				console.log("bonus: ",employes.data[query - 1][event.target.id] , " versus ", (event.target.value == "true"))
+				//console.log("bonus: ",employes.data[query - 1][event.target.id] , " versus ", (event.target.value == "true"))
 				
 				employes.data[query - 1][event.target.id]  = (event.target.value == "true") ;
 			}
 			else 
 			{
-				console.log("selection: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value)
+				//console.log("selection: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value)
 				employes.data[query - 1][event.target.id]  = event.target.value;
 					
 				
@@ -30,7 +30,7 @@ $(document).ready(function(){
 	$('input').change(
 		function(event) 
 		{
-			console.log(event.target.id)
+			//console.log(event.target.id)
 			if ( ["interne","externe","temporaire"].indexOf(event.target.id) >= 0)
 			{
 				newVal = event.target.id
@@ -41,7 +41,7 @@ $(document).ready(function(){
 			}
 			else if ( ["casque","bottes","lunettes"].indexOf(event.target.id) >= 0)
 			{
-				console.log("equip: ",employes.data[query - 1][event.target.id] , " versus ", event.target.checked);
+				//console.log("equip: ",employes.data[query - 1][event.target.id] , " versus ", event.target.checked);
 				employes.data[query - 1][event.target.id] = event.target.checked;
 			}
 			else 
@@ -57,7 +57,7 @@ $(document).ready(function(){
 		function(event) 
 		{
 			debug = event ;
-			console.log("texte: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value) ;
+			//console.log("texte: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value) ;
 			employes.data[query - 1][event.target.id] = event.target.value ;
 		}
 	);
@@ -68,7 +68,7 @@ $( document ).live( 'pageinit',function(event)
 	$("#salaire").on("slidestop",
 			function(event){
 				debug = event;
-				console.log("1ci slide: ",employes.data[query - 1][event.target.id]," versus ",event.target.value) ;
+				//console.log("1ci slide: ",employes.data[query - 1][event.target.id]," versus ",event.target.value) ;
 				employes.data[query - 1][event.target.id] = event.target.value ;
 		}
 	);
@@ -95,9 +95,9 @@ function DataCtrl($scope)
 	                },
 	                error: function (jqXHR,textStatus,errorThrown)
 	                {
-	                    console.log("fail ",jqXHR);
-	                    console.log("status ",textStatus);
-	                    console.log("err ",errorThrown);
+	                    //console.log("fail ",jqXHR);
+	                    //console.log("status ",textStatus);
+	                   // console.log("err ",errorThrown);
 	                }
 	              } // fin argument ajax
 	          );//Fin Ajax
@@ -128,9 +128,9 @@ function InspectionCtrl($scope)
 				},
 				error: function (jqXHR,textStatus,errorThrown) 
 				{
-					console.log("fail ",jqXHR);
-					console.log("status ",textStatus);
-					console.log("err ",errorThrown);
+					//console.log("fail ",jqXHR);
+					//console.log("status ",textStatus);
+					//console.log("err ",errorThrown);
 				}
 	  		} // fin argument ajax
 	  	);//Fin Ajax
