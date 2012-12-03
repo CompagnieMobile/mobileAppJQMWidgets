@@ -29,3 +29,7 @@ span[value^="-"] {
 
 ul.unstyled li {
 	list-style: none;}
+
+div.right-button {
+	text-align: right;
+	padding-bottom: 1em;}

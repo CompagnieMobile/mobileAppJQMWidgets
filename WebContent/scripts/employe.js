@@ -221,6 +221,7 @@ $("#employeDetail").live("pageshow", function(e, data)
 			}
 		
 		//query is now an ID, do stuff with it... test
+		document.getElementById("titre").innerHTML= employes.data[query-1].nom;
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
 		document.getElementById("telephone").value = employes.data[query-1].telephone;
@@ -231,19 +232,25 @@ $("#employeDetail").live("pageshow", function(e, data)
 		{
 			case "interne":
 				document.getElementById("interne").checked = true;
+				$('#externe').checkboxradio ("refresh");
 				$('#interne').checkboxradio ("refresh");
+				$('#temporaire').checkboxradio ("refresh");
 				break;
 			case "externe":
 				document.getElementById("externe").checked = true;
 				$('#externe').checkboxradio ("refresh");
+				$('#interne').checkboxradio ("refresh");
+				$('#temporaire').checkboxradio ("refresh");
 				break;
 			case "temporaire":
 				document.getElementById("temporaire").checked = true;
+				$('#externe').checkboxradio ("refresh");
+				$('#interne').checkboxradio ("refresh");
 				$('#temporaire').checkboxradio ("refresh");
 				break;
 
 		}
-		
+	
 		document.getElementById("salaire").value = employes.data[query-1].salaire;
 		
 		//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].casque);

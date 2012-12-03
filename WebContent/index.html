@@ -7,7 +7,7 @@
 	<title>MobileApp</title> 
 	<link rel="apple-touch-icon" href="icones/const_517x517.png"/>
 	
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> 
 
 	<link rel="stylesheet" href="styles/jquery.mobile-1.2.0.min.css" />
 
@@ -18,7 +18,7 @@
 	<script src=scripts/phonegap_func.js></script>
 	<script src=scripts/employe.js></script>
 
-	<link  rel="stylesheet" href=styles/styles.css>
+	<link  rel="stylesheet" href=styles/styles.css/>
 </head>
 <body ng-app> 
 
@@ -26,24 +26,22 @@
 <div data-role="page" id="suivi">
 
 	<div data-role="header"  data-position="fixed">
-		<h1>Suivi des inspections</h1>
-
-		
+		<h1>Inspecteurs</h1>
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<!--  <div ng-controller="DataCtrl">-->
-   			<ul data-role="listview" id="liste" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Taper ici..."  >
-         <div align="right">
-         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
+		<div class="right-button">
+         	<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
 	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" checked="true"  onclick="dataFilter()"/>
 	         	<label for="radio-view-a">Tout</label>
 	         	<input type="radio" name="radio-view" id="radio-view-b" value="late" onclick="dataFilter()"/>
 	         	<label for="radio-view-b">Retard</label>
 	         	<input type="radio" name="radio-view" id="radio-view-c" value="complete"  onclick="dataFilter()"/>
 	         	<label for="radio-view-c">Complete</label>
-	    </fieldset>     
-	    </div>     
+	    	</fieldset>  
+	     </div>   
+         <ul data-role="listview" id="liste" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Rechercher">
+         
 	    <script>
 	    	DataCtrl();
 	    	for(var i=0; i<employes.data.length; i++)
@@ -51,7 +49,7 @@
 	    		var stat = employes.data[i];
 	    		document.write("<li id='employe-li" + stat.id + "' data-theme='c'>");
 	    		document.write("<a href='#employeDetail?id=" + stat.id + "' data-transition='slide' >");
-	    		document.write("<span class=nom>" + stat.nom + "</span>");
+	    		document.write("<span class='nom'>" + stat.nom + "</span>");
 	    		document.write("<span class='inspDelta ui-li-count' value=" + stat.inspDelta + ">" + stat.inspDelta + "</span>");
 	    		document.write("</a></li>");
 	    	};
@@ -63,7 +61,7 @@
 	<div data-role="footer" data-position="fixed">		
 		<div data-role="navbar"  >
 			<ul>
-				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist"  >Accueil</a></li>
+				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist"  >Inspecteurs</a></li>
 				<li><a href="#config" data-icon="gear">Configuration</a></li>
 			</ul>
 		</div><!-- /navbar -->
@@ -81,12 +79,13 @@
 
 	<div data-role="content">	
 		<fieldset class="ui-grid-a">
-			<div class="ui-block-a"><label for="url" >URL:</label></div>
+			<div class="ui-block-a"><label for="url" >URL du serveur:</label></div>
 			<div class="ui-block-b"><input type="url" name="url" id="url" onchange="updateUrl(this.value)"/></div>
-			<div class="ui-block-a"><a href="#popupConnexion" data-rel="popup" data-role="button" data-position-to="window">Tester la connexion</a></div> 
-			<div class="ui-block-b"></div>
-			<div class="ui-block-a"><button onclick="capturePhoto();">Prendre une photo</button></div>
-			<div class="ui-block-b"><img style="display:none;width:60px;height:60px;" id="smallImage" src="" /></div>
+			<div class="ui-block-a"></div>
+			<div class="ui-block-b"><a href="#popupConnexion" data-rel="popup" data-role="button" data-position-to="window">Tester la connexion</a></div> 
+			<div class="ui-block-a"><img style="display:none;width:60px;height:60px;" id="smallImage" src="" /></div>
+			<div class="ui-block-b"><button onclick="capturePhoto();">Prendre une photo</button></div>
+			
 		</fieldset>
 		
 		<div data-role="popup" id="popupConnexion"><p id="popupText"></p></div>
@@ -108,10 +107,10 @@
 <!-- Début Eric Lepage -->
 
 
-<div data-role="page" id="employeDetail" data-add-back-btn="true">
+<div data-role="page" id="employeDetail" data-add-back-btn="true" data-back-btn-text="Inspecteurs">
 
-	<div data-role="header"  data-position="fixed" data-add-back-btn="true">
-		<h1>Suivi des inspections</h1>
+	<div data-role="header"  data-position="fixed" >
+		<h1 id="titre"></h1>
 	</div><!-- /header -->
 
 	<div data-role="content">
@@ -119,45 +118,26 @@
 	
 		<h3>Information pertinente à l'employé</h3>
 		<fieldset class="ui-grid-a">
-			<div class="ui-block-a"><label for="empl">Nom: </label></div>
-			<div class="ui-block-b">
-					<div ng-controller="DataCtrl">
-						<input type="text" name="name" id="nom" value=""/>
-					</div>
-			</div>
-		</fieldset>
-		
-		<fieldset class="ui-grid-a">
-			<div class="ui-block-a"><label for="empltel" >Numéro de téléphone:</label></div>
+			<div class="ui-block-a"><label for="empl">Nom : </label></div>
+			<div class="ui-block-b"><input type="text" name="name" id="nom" value=""/></div>
+			<div class="ui-block-a"><label for="empltel" >Numéro de téléphone :</label></div>
 			<div class="ui-block-b"><input type="tel" name="nametel" id="telephone" value="514-333-4444" /></div>
-		</fieldset>
-	
-			<fieldset class="ui-grid-a">
-			<div class="ui-block-a"><label for="email" >Courriel:</label></div>
+			<div class="ui-block-a"><label for="email" >Courriel :</label></div>
 			<div class="ui-block-b"><input type="email" name="nametel" id="email" value="514-333-4444" /></div>
-		</fieldset>
-	
-		<fieldset class="ui-grid-a">	
-			<label for="textarea" class="ui-block-a">Remarques:</label>
+			<label for="textarea" class="ui-block-a">Remarques :</label>
 			<textarea name="textarea" id="remarque" class="ui-block-b" value="N" /> 
 					N'est pas dispo vendredi 
 			</textarea>
-		</fieldset>
-	
-		<fieldset class="ui-grid-a">
-			<label for="flip-1" class="ui-block-a">Bonus ?:</label>
+			<label for="flip-1" class="ui-block-a">Bonus :</label>
 			<div class="ui-block-b">
 				<select name="flip-1" id="bonus" data-role="slider" >
 					<option value="false">Non</option>		
 					<option value="true">Oui</option>
 				</select> 
 			</div>
-		</fieldset>
-		
-		<div class="ui-grid-a">
 			<div class="ui-block-a">
 				<div data-role="fieldcontain">		
-					<label for="radio-choice" class="ui-block-a">Statut de l'employé</label>
+					<label for="radio-choice" class="ui-block-a">Statut de l'employé :</label>
 				</div>
 			</div>
 		
@@ -173,39 +153,30 @@
 					</fieldset>
 				</div>
 			</div>	
-		</div>
-	
-		<div class="ui-grid-a">
 			<div class="ui-block-a">
 				<div data-role="fieldcontain">
-					<label for="slider-2">Salaire:</label>
+					<label for="slider-2">Salaire :</label>
 				</div> 
 			</div>
 		
 			<div class="ui-block-b">
 				<div data-role="fieldcontain">
-					<input type="range" name="slider-2" id="salaire" value="52000" min="0" max="150000" />
+					<input type="range" name="slider-2" id="salaire" value="50000" min="0" max="150000" data-highlight="true"/>
 				</div>
 			</div>
-		</div>
-	
-		<div class="ui-grid-a">
 			<div class="ui-block-a">
-				<legend>Équipement:</legend>
+				<legend>Équipement :</legend>
 			</div> 
 			<div class="ui-block-b">
-				<input type="checkbox" name="checkbox-eqp" id="casque" class="custom" />
+				<input type="checkbox" name="checkbox-eqp" id="casque" class="custom" checked="false" />
 				<label for="casque">Casque</label>
-				<input type="checkbox" name="checkbox-eqp" id="lunettes" class="custom" />
+				<input type="checkbox" name="checkbox-eqp" id="lunettes" class="custom" checked="false" />
 				<label for="lunettes">Lunette</label>
-				<input type="checkbox" name="checkbox-eqp" id="bottes" class="custom" />
+				<input type="checkbox" name="checkbox-eqp" id="bottes" class="custom" checked="false" />
 				<label for="bottes">Botte</label>
 			</div>	
-		</div>
-		
-		<div class="ui-grid-a">
 			<div class="ui-block-a">
-				<label for="select-choice-0" class="select">Territoire:</label>
+				<label for="select-choice-0" class="select">Territoire :</label>
 			</div>
 			<div class="ui-block-b">
 				<select name="select-choice-0" id="territoire" class="target">
@@ -219,7 +190,8 @@
 					<option value="SEI">Richelieu</option>
 				</select>
 			</div>
-	</div>
+		</fieldset>
+	</div><!-- /content -->
 	<!--
 	<script>
     $("select").change(function () {
