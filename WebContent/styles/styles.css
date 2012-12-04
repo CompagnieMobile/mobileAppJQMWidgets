@@ -30,6 +30,8 @@ span[value^="-"] {
 ul.unstyled li {
 	list-style: none;}
 
-div.right-button {
-	text-align: right;
-	padding-bottom: 1em;}
+.right-button {
+	position:absolute;
+	top:0; 
+	right:20px;}
+	
