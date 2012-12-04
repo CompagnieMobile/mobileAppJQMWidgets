@@ -57,12 +57,17 @@ function onPhotoSuccess(imageURI)
 
 function captureBarcode()
 {
-	window.plugins.barcodeScanner.scan( function(result) 
+	window.plugins.barcodeScanner.scan(function(result) 
 			{
-				alert("We got a barcode\n" +
+				if (result.cancelled)
+					alert("the user cancelled the scan")
+				else
+					alert("we got a barcode: " + result.text)
+		
+				/*alert("We got a barcode\n" +
 						"Result: " + result.text + "\n" +
 						"Format: " + result.format + "\n" +
-						"Cancelled: " + result.cancelled);
+						"Cancelled: " + result.cancelled);*/
 			}, function(error) 
 			{
 				alert("Scanning failed: " + error);
