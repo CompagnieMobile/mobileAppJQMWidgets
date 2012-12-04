@@ -1,3 +1,4 @@
+
 var employes=[];
 
 if(localStorage.getItem('url') == null)
@@ -13,16 +14,15 @@ $(document).ready(function(){
 			debug = event;
 			if (event.target.id = "bonus")
 			{
-				console.log("bonus: ",employes.data[query - 1][event.target.id] , " versus ", (event.target.value == "true"))
-				
+				//console.log("bonus: ",employes.data[query - 1][event.target.id] , " versus ", (event.target.value == "true"))
 				employes.data[query - 1][event.target.id]  = (event.target.value == "true") ;
+				DataSync();
 			}
 			else 
 			{
-				console.log("selection: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value)
+				//console.log("selection: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value)
 				employes.data[query - 1][event.target.id]  = event.target.value;
-					
-				
+				DataSync();
 			}
 		}
 	);
@@ -33,22 +33,25 @@ $(document).ready(function(){
 			console.log(event.target.id)
 			if ( ["interne","externe","temporaire"].indexOf(event.target.id) >= 0)
 			{
-				newVal = event.target.id
+				newVal = event.target.id;
 				var newVal = newVal[0].toUpperCase().concat(newVal.substr(1,newVal.length));
-				console.log("typeEmpl: ",employes.data[query - 1]["typeEmploye"] , " versus ", newVal)
+				//console.log("typeEmpl: ",employes.data[query - 1]["typeEmploye"] , " versus ", newVal)
 				employes.data[query - 1]["typeEmploye"] = newVal;
+				DataSync()
 				
 			}
 			else if ( ["casque","bottes","lunettes"].indexOf(event.target.id) >= 0)
 			{
-				console.log("equip: ",employes.data[query - 1][event.target.id] , " versus ", event.target.checked);
+				//console.log("equip: ",employes.data[query - 1][event.target.id] , " versus ", event.target.checked);
 				employes.data[query - 1][event.target.id] = event.target.checked;
+				DataSync()
 			}
 			else 
 			{
-				debug = event
-				console.log("input change: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value);
+				debug = event;
+				//console.log("input change: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value);
 				employes.data[query - 1][event.target.id] = event.target.value;
+				DataSync();
 			}
 		}
 	);
@@ -57,8 +60,9 @@ $(document).ready(function(){
 		function(event) 
 		{
 			debug = event ;
-			console.log("texte: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value) ;
+			//console.log("texte: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value) ;
 			employes.data[query - 1][event.target.id] = event.target.value ;
+			DataSync()
 		}
 	);
 });
@@ -66,10 +70,11 @@ $(document).ready(function(){
 $( document ).live( 'pageinit',function(event)
 {
 	$("#salaire").on("slidestop",
-			function(event){
-				debug = event;
-				console.log("1ci slide: ",employes.data[query - 1][event.target.id]," versus ",event.target.value) ;
-				employes.data[query - 1][event.target.id] = event.target.value ;
+		function(event){
+			debug = event;
+			//console.log("slide: ",employes.data[query - 1][event.target.id]," versus ",event.target.value) ;
+			employes.data[query - 1][event.target.id] = event.target.value ;
+			DataSync();
 		}
 	);
 });
@@ -77,9 +82,9 @@ $( document ).live( 'pageinit',function(event)
 function DataCtrl($scope)
 {
 	var value;
-	const pos = "employeJS_ind"
+	const pos = "employeJS_ind";
 	value =	localStorage.getItem(pos);
-	if (value == null) 
+	if (value != null) 
 	{
 	    $.ajax(
 	            {
@@ -102,7 +107,8 @@ function DataCtrl($scope)
 	              } // fin argument ajax
 	          );//Fin Ajax
 	   	localStorage.setItem(pos , JSON.stringify(employes));
-	   	console.log("loc storing: ", JSON.stringify(employes));
+	   	
+	   	//console.log("loc storing: ", JSON.stringify(employes));
 	}
 	else 
 	{
@@ -110,7 +116,40 @@ function DataCtrl($scope)
 		employes =  JSON.parse(value);
 		//console.log("loc storage: ", employes);
 	}
+}//Fin DataCtrl
+
+function DataSync()
+{
+	var index = query - 1;
+	const pos = "employeJS_ind";
 		
+	var jr = JSON.stringify(employes.data[query-1]);	
+	var myUrl = localStorage.getItem('url').concat("/api/employe/", employes.data[query-1].id);
+
+	jr = "".concat("{" + '"success"' +  ":true,"+ '"data"' + ":", jr, "}");
+	//console.log("jr!: ",jr);
+	//console.log("url: ",myUrl);
+	
+    $.ajax(
+            {
+            	type: "PUT",
+            	url: myUrl,
+            	data: jr,
+                success: function (i)
+                {
+                	console.log("success sync");
+                },
+               
+                error: function (jqXHR,textStatus,errorThrown)
+                {
+                	debug = jqXHR;
+                    console.log("fail ",jqXHR);
+                    console.log("status ",textStatus);
+                    console.log("err ",errorThrown);
+                }
+            } // fin argument ajax
+       );//Fin Ajax
+       
 }//Fin DataCtrl
 
 function InspectionCtrl($scope) 
@@ -175,17 +214,18 @@ $("#employeDetail").live("pageshow", function(e, data)
 		query = query.replace("id=","");
 		//console.log("qu: ", query);
 		for (var i=0; i<employes.data.length; i++)
-			{
-/*				console.log("        employes.data[i].id: ",employes.data[i].id, " ",
-						" employes.data[i].nom ",employes.data[i].nom 
-				)
-				*/			
-				if (employes.data[i].id == query)
-					{
-						query = (i + 1)
-					}
-			}
-		
+		{
+			console.log("        employes.data[i].id: ",employes.data[i].id, " ",
+					" employes.data[i].nom ",employes.data[i].nom 
+			)
+					
+			if (employes.data[i].id == query)
+				{
+					console.log("   ",i+1)
+					query = (i + 1)
+				}
+		}
+		console.log(query);
 		//query is now an ID, do stuff with it... test
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
@@ -207,7 +247,6 @@ $("#employeDetail").live("pageshow", function(e, data)
 				document.getElementById("temporaire").checked = true;
 				$('#temporaire').checkboxradio ("refresh");
 				break;
-
 		}
 		
 		document.getElementById("salaire").value = employes.data[query-1].salaire;
