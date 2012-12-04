@@ -29,3 +29,12 @@ span[value^="-"] {
 
 ul.unstyled li {
 	list-style: none;}
+
+.right-button {
+	position:absolute;
+	top:0; 
+	right:20px;}
+	
+.hide-employe {
+	display:none;}
+	

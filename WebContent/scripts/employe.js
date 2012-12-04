@@ -24,35 +24,37 @@ $(document).ready(function(){
 				employes.data[query - 1][event.target.id]  = event.target.value;
 				DataSync();
 			}
+			localStorage.setItem("employeJS_ind",JSON.stringify(employes));
 		}
 	);
 
 	$('input').change(
 		function(event) 
 		{
-			console.log(event.target.id)
+			//console.log(event.target.id)
 			if ( ["interne","externe","temporaire"].indexOf(event.target.id) >= 0)
 			{
 				newVal = event.target.id;
 				var newVal = newVal[0].toUpperCase().concat(newVal.substr(1,newVal.length));
 				//console.log("typeEmpl: ",employes.data[query - 1]["typeEmploye"] , " versus ", newVal)
 				employes.data[query - 1]["typeEmploye"] = newVal;
-				DataSync()
+				DataSync();
 				
 			}
 			else if ( ["casque","bottes","lunettes"].indexOf(event.target.id) >= 0)
 			{
 				//console.log("equip: ",employes.data[query - 1][event.target.id] , " versus ", event.target.checked);
 				employes.data[query - 1][event.target.id] = event.target.checked;
-				DataSync()
+				DataSync();
 			}
 			else 
 			{
-				debug = event;
 				//console.log("input change: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value);
 				employes.data[query - 1][event.target.id] = event.target.value;
+				debug = event
 				DataSync();
 			}
+			localStorage.setItem("employeJS_ind",JSON.stringify(employes));
 		}
 	);
 	
@@ -62,7 +64,8 @@ $(document).ready(function(){
 			debug = event ;
 			//console.log("texte: ",employes.data[query - 1][event.target.id] , " versus ", event.target.value) ;
 			employes.data[query - 1][event.target.id] = event.target.value ;
-			DataSync()
+			DataSync();
+			localStorage.setItem("employeJS_ind",JSON.stringify(employes));
 		}
 	);
 });
@@ -75,16 +78,18 @@ $( document ).live( 'pageinit',function(event)
 			//console.log("slide: ",employes.data[query - 1][event.target.id]," versus ",event.target.value) ;
 			employes.data[query - 1][event.target.id] = event.target.value ;
 			DataSync();
+			localStorage.setItem("employeJS_ind",JSON.stringify(employes));
+			
 		}
 	);
 });
 
-function DataCtrl($scope)
+function DataCtrl()//$scope)
 {
 	var value;
 	const pos = "employeJS_ind";
 	value =	localStorage.getItem(pos);
-	if (value != null) 
+	if (value == null) 
 	{
 	    $.ajax(
 	            {
@@ -95,24 +100,21 @@ function DataCtrl($scope)
 	                crossDomain: true,
 	                success: function (i)
 	                {
-	                	$scope.employes = i;
 	                	employes=i;
 	                },
 	                error: function (jqXHR,textStatus,errorThrown)
 	                {
-	                    console.log("fail ",jqXHR);
-	                    console.log("status ",textStatus);
-	                    console.log("err ",errorThrown);
+	                    //console.log("fail ",jqXHR);
+	                    //console.log("status ",textStatus);
+	                   // console.log("err ",errorThrown);
 	                }
 	              } // fin argument ajax
 	          );//Fin Ajax
-	   	localStorage.setItem(pos , JSON.stringify(employes));
-	   	
+	   	localStorage.setItem(pos , JSON.stringify(employes));   	
 	   	//console.log("loc storing: ", JSON.stringify(employes));
 	}
 	else 
 	{
-		$scope.employes = JSON.parse(value);
 		employes =  JSON.parse(value);
 		//console.log("loc storage: ", employes);
 	}
@@ -137,15 +139,15 @@ function DataSync()
             	data: jr,
                 success: function (i)
                 {
-                	console.log("success sync");
+                	//console.log("success sync");
                 },
                
                 error: function (jqXHR,textStatus,errorThrown)
                 {
                 	debug = jqXHR;
-                    console.log("fail ",jqXHR);
-                    console.log("status ",textStatus);
-                    console.log("err ",errorThrown);
+                    //console.log("fail ",jqXHR);
+                    //console.log("status ",textStatus);
+                    //console.log("err ",errorThrown);
                 }
             } // fin argument ajax
        );//Fin Ajax
@@ -167,14 +169,51 @@ function InspectionCtrl($scope)
 				},
 				error: function (jqXHR,textStatus,errorThrown) 
 				{
-					console.log("fail ",jqXHR);
-					console.log("status ",textStatus);
-					console.log("err ",errorThrown);
+					//console.log("fail ",jqXHR);
+					//console.log("status ",textStatus);
+					//console.log("err ",errorThrown);
 				}
 	  		} // fin argument ajax
 	  	);//Fin Ajax
 }//Fin DataCtrl
 
+function dataFilter()
+{
+	var affichage=false;
+	if (document.getElementById("radio-view-b").checked == true)
+	{
+		for(var i=0; i<employes.data.length; i++)
+    	{
+			var employe = employes.data[i];
+			var el = document.getElementById("employe-li" + employe.id);
+			if(employe.inspDelta < 0)
+				el.className = el.className.replace(/(?:^|\s)hide-employe(?!\S)/g , '' );
+			else
+				el.className = el.className + " hide-employe";
+    	}
+	}	
+	else if (document.getElementById("radio-view-c").checked == true)
+	{
+		for(var i=0; i<employes.data.length; i++)
+    	{
+			var employe = employes.data[i];
+			var el = document.getElementById("employe-li" + employe.id);
+			if(employe.inspDelta >= 0)
+				el.className = el.className.replace(/(?:^|\s)hide-employe(?!\S)/g , '' );
+			else
+				el.className = el.className + " hide-employe";
+    	}
+	}
+	else if (document.getElementById("radio-view-a").checked == true)
+	{
+		for(var i=0; i<employes.data.length; i++)
+    	{
+			var employe = employes.data[i];
+			var el = document.getElementById("employe-li" + employe.id);
+			el.className = el.className.replace(/(?:^|\s)hide-employe(?!\S)/g , '' );
+    	}
+	}
+}
 
 //--- PAGE 
 function showDetail( urlObj, options )
@@ -215,18 +254,18 @@ $("#employeDetail").live("pageshow", function(e, data)
 		//console.log("qu: ", query);
 		for (var i=0; i<employes.data.length; i++)
 		{
-			console.log("        employes.data[i].id: ",employes.data[i].id, " ",
-					" employes.data[i].nom ",employes.data[i].nom 
-			)
+			//console.log("        employes.data[i].id: ",employes.data[i].id, " ",
+			//		" employes.data[i].nom ",employes.data[i].nom 
+			//)
 					
 			if (employes.data[i].id == query)
 				{
-					console.log("   ",i+1)
+					//console.log("   ",i+1)
 					query = (i + 1)
 				}
 		}
-		console.log(query);
 		//query is now an ID, do stuff with it... test
+		document.getElementById("titre").innerHTML= employes.data[query-1].nom;
 		document.getElementById("nom").value = employes.data[query-1].nom;
 		document.getElementById("email").value = employes.data[query-1].email;
 		document.getElementById("telephone").value = employes.data[query-1].telephone;
@@ -237,18 +276,24 @@ $("#employeDetail").live("pageshow", function(e, data)
 		{
 			case "interne":
 				document.getElementById("interne").checked = true;
+				$('#externe').checkboxradio ("refresh");
 				$('#interne').checkboxradio ("refresh");
+				$('#temporaire').checkboxradio ("refresh");
 				break;
 			case "externe":
 				document.getElementById("externe").checked = true;
 				$('#externe').checkboxradio ("refresh");
+				$('#interne').checkboxradio ("refresh");
+				$('#temporaire').checkboxradio ("refresh");
 				break;
 			case "temporaire":
 				document.getElementById("temporaire").checked = true;
+				$('#externe').checkboxradio ("refresh");
+				$('#interne').checkboxradio ("refresh");
 				$('#temporaire').checkboxradio ("refresh");
 				break;
 		}
-		
+	
 		document.getElementById("salaire").value = employes.data[query-1].salaire;
 		
 		//console.log("query: ",employes.data[query-1].nom, " ", employes.data[query-1].casque);
@@ -271,9 +316,40 @@ $("#employeDetail").live("pageshow", function(e, data)
 $("#config").live("pageshow", function(e, data) 
 		{
 			document.getElementById("url").value = localStorage.getItem('url');
+			document.getElementById('popupText').innerHTML = checkConnection();	
 		}
 		);
 
+function checkConnection()
+{
+	//console.log("Connexion: " + navigator.connection);
+	if (navigator.network != null)
+	{
+		//console.log("Connexion Type: " + navigator.connection.type);
+		var networkState = navigator.network.connection.type;
+		var states = {};
+        states[Connection.UNKNOWN]  = 'Connexion inconnue';
+        states[Connection.ETHERNET] = 'Connexion Ethernet';
+        states[Connection.WIFI]     = 'Connexion WiFi';
+        states[Connection.CELL_2G]  = 'Connexion Cell 2G';
+        states[Connection.CELL_3G]  = 'Connexion Cell 3G';
+        states[Connection.CELL_4G]  = 'Connexion Cell 4G';
+        states[Connection.NONE]     = 'Aucune connexion';
+        
+        return states[networkState];
+	}
+	else
+	{
+		if(navigator.onLine)
+		{
+			return 'Connexion active';
+		}
+		else
+		{
+			return 'Aucune connexion';
+		}
+	}		
+}
 function updateUrl(value) 
 {
 	localStorage.setItem('url', value);

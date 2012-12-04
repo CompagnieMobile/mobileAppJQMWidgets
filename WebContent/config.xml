@@ -3,14 +3,17 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.phonegap.example"
         versionCode="10" 
-        version   = "1.0.0">
+        version   = "1.0.1">
 
 
-    <name>config</name>
+    <name>JQMWidget</name>
 
     <description>
         Configuration de l'application JQMWidget. 
     </description>
     
 	<preference name="webviewbounce" value="false" />
+<icon src="icones/const_517x517.png"/>
+<gap:splash src="icones/const_517x517.png" />
+<gap:plugin name="BarcodeScanner" />
 </widget>
