@@ -60,9 +60,9 @@ function captureBarcode()
 	window.plugins.barcodeScanner.scan(function(result) 
 			{
 				if (result.cancelled)
-					alert("the user cancelled the scan")
+					alert("the user cancelled the scan");
 				else
-					alert("we got a barcode: " + result.text)
+					alert("we got a barcode: " + result.text);
 		
 				/*alert("We got a barcode\n" +
 						"Result: " + result.text + "\n" +
