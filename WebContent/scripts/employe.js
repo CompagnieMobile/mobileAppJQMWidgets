@@ -110,8 +110,7 @@ $( document ).live( 'pageinit',function(event)
 					);
 				// insert swipe div into list item
 				debug = $li;
-				$('#delta-' + $li.context.id).hide()
-				//$li.contents().contents().hide();		
+				$('#delta-' + $li.context.id).hide()	
 				$li.prepend($deleteBtn);
 				$('#liste').listview('refresh');
 			})
@@ -119,23 +118,43 @@ $( document ).live( 'pageinit',function(event)
 	})
 });
 
-/*
- * 	    	for(var i=0; i<employes.data.length; i++)
-	    	{
-	    		var stat = employes.data[i];
-	    		document.write("<li id='employe-li" + stat.id + "' data-theme='c'>");
-	    		document.write("<a href='#employeDetail?id=" + stat.id + "' data-transition='slide' >");
-	    		document.write("<span class='nom'>" + stat.nom + "</span>");
-	    		document.write("<span class='inspDelta ui-li-count' value=" + stat.inspDelta + ">" + stat.inspDelta + "</span>");
-	    		document.write("</a></li>");
-	    	};
- */
 function deleteEmpl(e)
 {
 	//console.log(e)//, " - ", $li.context.id, " -> ",$('#liste').children());
 
 	$('#liste').children().remove("li#"+e);
 	$('#liste').listview('refresh');
+	console.log(e, " ---- ",e.split("employe-li")  )
+	var index = e.split("employe-li")[1] ;
+	const pos = "employeJS_ind";
+	console.log("a");
+	var jr = JSON.stringify(employes.data[index]);	
+	console.log("b", index, " -- " , employes.data);
+	var myUrl = localStorage.getItem('url').concat("/api/employe/", index);
+	console.log("c ");
+	employes.data.pop(index);
+	jr = "".concat("{" + '"success"' +  ":true,"+ '"data"' + ":", jr, "}");
+    $.ajax(
+            {
+            	type: "DELETE",
+            	url: myUrl,
+            	//data: jr,
+                success: function (i)
+                {
+                	console.log("success sync");
+                },
+               
+                error: function (jqXHR,textStatus,errorThrown)
+                {
+                	debug = jqXHR;
+                    console.log("fail ",jqXHR);
+                    console.log("status ",textStatus);
+                    console.log("err ",errorThrown);
+                }
+            } // fin argument ajax
+       );//Fin Ajax
+    	localStorage.setItem(pos , JSON.stringify(employes)); 
+
 }
 function DataCtrl()//$scope)
 {
