@@ -60,9 +60,9 @@ function captureBarcode()
 	window.plugins.barcodeScanner.scan(function(result) 
 			{
 				if (result.cancelled)
-					alert("the user cancelled the scan");
+					navigator.notification.alert("Scan annulé");
 				else
-					alert("we got a barcode: " + result.text);
+					navigator.notification.alert("Résultat: " + result.text);
 		
 				/*alert("We got a barcode\n" +
 						"Result: " + result.text + "\n" +
@@ -70,7 +70,7 @@ function captureBarcode()
 						"Cancelled: " + result.cancelled);*/
 			}, function(error) 
 			{
-				alert("Scanning failed: " + error);
+				navigator.notification.alert("Échec: " + error);
 			});
 }
 
