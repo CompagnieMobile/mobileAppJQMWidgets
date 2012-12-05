@@ -33,7 +33,8 @@
 <div data-role="page" id="suivi">
 
 	<div data-role="header"  data-position="fixed">
-		<h1 id="insp-header">Inspecteurs</h1>
+		<!--  <a href="#employeDetail" data-role="button" data-icon="plus" data-inline="true" data-iconpos="notext"></a> -->
+		<h1>Inspecteurs</h1>
 		<span class="right-button">
          	<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
 	         	<input type="radio" name="radio-view" id="radio-view-a" value="all" checked="true"  onclick="dataFilter()"/>
@@ -46,19 +47,19 @@
 	     </span>   
 	</div><!-- /header -->
 
-	<div data-role="content">	
+	<div data-role="content" id="suiviContent">	
 		
-         <ul data-role="listview" id="liste" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Rechercher">
+         <ul data-role="listview" id="liste" data-divider-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Rechercher...">
          
 	    <script>
-	    	DataCtrl();
+			DataCtrl();
 	    	for(var i=0; i<employes.data.length; i++)
 	    	{
 	    		var stat = employes.data[i];
 	    		document.write("<li id='employe-li" + stat.id + "' data-theme='c'>");
 	    		document.write("<a href='#employeDetail?id=" + stat.id + "' data-transition='slide' >");
 	    		document.write("<span class='nom'>" + stat.nom + "</span>");
-	    		document.write("<span class='inspDelta ui-li-count' value=" + stat.inspDelta + ">" + stat.inspDelta + "</span>");
+	    		document.write("<span id='delta-employe-li" + stat.id + "' class='inspDelta ui-li-count' value=" + stat.inspDelta + ">" + stat.inspDelta + "</span>");
 	    		document.write("</a></li>");
 	    	};
 	    </script>
@@ -69,7 +70,7 @@
 	<div data-role="footer" data-position="fixed">		
 		<div data-role="navbar"  >
 			<ul>
-				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist"  >Inspecteurs</a></li>
+				<li><a href="#suivi" data-icon="home"  class="ui-btn-active ui-state-persist">Inspecteurs</a></li>
 				<li><a href="#config" data-icon="gear">Configuration</a></li>
 			</ul>
 		</div><!-- /navbar -->
@@ -118,26 +119,26 @@
 <!-- Début Eric Lepage -->
 
 
-<div data-role="page" id="employeDetail" data-add-back-btn="true" data-back-btn-text="Inspecteurs">
-
+<div data-role="page" id="employeDetail">
+	
 	<div data-role="header"  data-position="fixed" >
+		<a href="#suivi" data-icon="arrow-l">Inspecteurs</a>
 		<h1 id="titre"></h1>
 	</div><!-- /header -->
 
 	<div data-role="content">
 	<div data-role="collapsible"  data-collapsed="false">
 	
-		<h3>Information pertinente à l'employé</h3>
+		<h3>Information générale</h3>
 		<fieldset class="ui-grid-a">
 			<div class="ui-block-a"><label for="empl">Nom : </label></div>
 			<div class="ui-block-b"><input type="text" name="name" id="nom" value=""/></div>
 			<div class="ui-block-a"><label for="empltel" >Numéro de téléphone :</label></div>
-			<div class="ui-block-b"><input type="tel" name="nametel" id="telephone" value="514-333-4444" /></div>
+			<div class="ui-block-b"><input type="tel" name="nametel" id="telephone" value="" /></div>
 			<div class="ui-block-a"><label for="email" >Courriel :</label></div>
-			<div class="ui-block-b"><input type="email" name="nametel" id="email" value="514-333-4444" /></div>
+			<div class="ui-block-b"><input type="email" name="nametel" id="email" value="" /></div>
 			<label for="textarea" class="ui-block-a">Remarques :</label>
-			<textarea name="textarea" id="remarque" class="ui-block-b" value="N" /> 
-					N'est pas dispo vendredi 
+			<textarea name="textarea" id="remarque" class="ui-block-b" value="" />  
 			</textarea>
 			<label for="flip-1" class="ui-block-a">Bonus :</label>
 			<div class="ui-block-b">
@@ -172,7 +173,7 @@
 		
 			<div class="ui-block-b">
 				<div data-role="fieldcontain">
-					<input type="range" name="slider-2" id="salaire" value="50000" min="0" max="150000" data-highlight="true"/>
+					<input type="range" name="slider-2" id="salaire" value="0" min="0" max="150000" data-highlight="true"/>
 				</div>
 			</div>
 			<div class="ui-block-a">
@@ -191,8 +192,8 @@
 			</div>
 			<div class="ui-block-b">
 				<select name="select-choice-0" id="territoire" class="target">
-					<option value="Québec"> Québec </option>
-					<option value="Autre"> Autre </option>
+					<option value="Québec">Québec</option>
+					<option value="Autre">Autre</option>
 					<option value="LAV">Laurentides</option>
 					<option value="Montréal">Montréal</option>
 					<option value="MAT">Nord-Est</option>
