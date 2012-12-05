@@ -15,5 +15,6 @@
 	<preference name="webviewbounce" value="false" />
 <icon src="icones/const_517x517.png"/>
 <gap:splash src="icones/const_517x517.png" />
+<gap:splash src="images/splashP2x.png" width="1536" height="2008" />
 <gap:plugin name="BarcodeScanner" />
 </widget>
