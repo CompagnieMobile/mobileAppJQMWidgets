@@ -92,14 +92,49 @@ $( document ).live( 'pageinit',function(event)
 			
 		}
 	);
+	$('div').live('pageshow',function(event,ui)
+	{
+		//$('#liste').children().remove("li#employe-li4")
+		if ( event.target.id.indexOf("suivi") >= 0) 
+		{
+			// remove any existing swipe areas			
+			$('.aDeleteBtn').remove();
+			// add swipe event to the list item			
+			$('ul li').bind('swipeleft', function(e)
+					{
+						// reference the just swiped list item
+						debug = $(this);
+						var $li = $(this);
+						// remove all buttons first
+						$('.aDeleteBtn').remove();
+						// create buttons and div container
+						//$('#liste').children().remove($(this).context.id);
+						var temp = "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"//{"+"$(" + "'#liste'" + ").children().remove(" +'"'+$li.context.id+'")}'
+
+						var $deleteBtn = $('<a>Delete</a>').attr(
+						{
+							'class': 'aDeleteBtn ui-btn-up-r',
+							'href': "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"
+						}
+						
+					);
+				// insert swipe div into list item
+				debug = $li;
+				$('#delta-' + $li.context.id).hide()
+				//$li.contents().contents().hide();		
+				$li.prepend($deleteBtn);
+				$('#liste').listview('refresh');
+			})
+		}
+	})
 });
 
 function createEmploye()
 {
-	var properties = {nom:"", email:"", casque:false, territoire:"Québec", typeEmploye:"Interne",inspPrevues:0,
+	var properties = {nom:"", email:"", casque:false, territoire:"Quï¿½bec", typeEmploye:"Interne",inspPrevues:0,
 			salaire:0, inspDelta:0, bonus:false, bottes:false, lunettes:false, remarque:"", telephone:""};
 	
-	var employe = {attached:true, nom:"", email:"", casque:false, territoire:"Québec", typeEmploye:"Interne",inspPrevues:0,
+	var employe = {attached:true, nom:"", email:"", casque:false, territoire:"Quï¿½bec", typeEmploye:"Interne",inspPrevues:0,
 			salaire:0, inspDelta:0, bonus:false, bottes:false, lunettes:false, remarque:"", telephone:"", properties:properties};
 	
 	return employe;
@@ -273,6 +308,7 @@ function dataFilter()
 			el.className = el.className.replace(/(?:^|\s)hide-employe(?!\S)/g , '' );
     	}
 	}
+	$('#liste').listview('refresh');
 }
 
 //--- PAGE 
@@ -390,7 +426,7 @@ $("#employeDetail").live("pageshow", function(e, data)
 			$('#lunettes').checkboxradio("refresh");
 			document.getElementById("bottes").checked = false ;
 			$('#bottes').checkboxradio ("refresh");
-			document.getElementById("territoire").value = "Québec";
+			document.getElementById("territoire").value = "Quï¿½bec";
 			$('#territoire').selectMenu;
 		}
 	}
