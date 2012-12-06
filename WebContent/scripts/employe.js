@@ -101,28 +101,28 @@ $( document ).live( 'pageinit',function(event)
 			$('.aDeleteBtn').remove();
 			// add swipe event to the list item			
 			$('ul li').bind('swipeleft', function(e)
-				{
-					// reference the just swiped list item
-					var $li = $(this);
-					if ($('.aDeleteBtn').val() != null)
-					{
-						id = $('.aDeleteBtn').parent().attr("id");//.split("employe-li")[1];
-						$('#delta-' + id).show();
-					}
-									
-					// remove all buttons first
-					$('.aDeleteBtn').remove();
-					
-					// create buttons and div container
-					//$('#liste').children().remove($(this).context.id);
-					var temp = "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"//{"+"$(" + "'#liste'" + ").children().remove(" +'"'+$li.context.id+'")}'
-	
-					var $deleteBtn = $('<a>Delete</a>').attr(
-					{
-						'class': 'aDeleteBtn ui-btn-up-r',
-						'href': "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"
-					}				
-					);
+						{
+							// reference the just swiped list item
+							var $li = $(this);
+							if ($('.aDeleteBtn').val() != null)
+							{
+								id = $('.aDeleteBtn').parent().attr("id");//.split("employe-li")[1];
+								$('#delta-' + id).show();
+							}
+											
+							// remove all buttons first
+							$('.aDeleteBtn').remove();
+							
+							// create buttons and div container
+							//$('#liste').children().remove($(this).context.id);
+							var temp = "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"//{"+"$(" + "'#liste'" + ").children().remove(" +'"'+$li.context.id+'")}'
+			
+							var $deleteBtn = $('<a>Delete</a>').attr(
+							{
+								'class': 'aDeleteBtn ui-btn-up-r',
+								'href': "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"
+							}				
+							);
 				debug =$deleteBtn;
 				// insert swipe div into list item
 				
