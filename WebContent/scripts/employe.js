@@ -1,6 +1,6 @@
 
 var employes=[];
-
+var debug;
 if(localStorage.getItem('url') == null)
 {
 	localStorage.setItem('url', 'http://backplane.cloudfoundry.com');
@@ -28,7 +28,7 @@ $(document).ready(function(){
 		}
 	);
 
-	$('input').change(
+	$('#employeDetail').change(
 		function(event) 
 		{
 			//console.log("Query: " + query)
@@ -101,25 +101,31 @@ $( document ).live( 'pageinit',function(event)
 			$('.aDeleteBtn').remove();
 			// add swipe event to the list item			
 			$('ul li').bind('swipeleft', function(e)
+				{
+					// reference the just swiped list item
+					var $li = $(this);
+					if ($('.aDeleteBtn').val() != null)
 					{
-						// reference the just swiped list item
-						debug = $(this);
-						var $li = $(this);
-						// remove all buttons first
-						$('.aDeleteBtn').remove();
-						// create buttons and div container
-						//$('#liste').children().remove($(this).context.id);
-						var temp = "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"//{"+"$(" + "'#liste'" + ").children().remove(" +'"'+$li.context.id+'")}'
-
-						var $deleteBtn = $('<a>Delete</a>').attr(
-						{
-							'class': 'aDeleteBtn ui-btn-up-r',
-							'href': "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"
-						}
-						
+						id = $('.aDeleteBtn').parent().attr("id");//.split("employe-li")[1];
+						$('#delta-' + id).show();
+					}
+									
+					// remove all buttons first
+					$('.aDeleteBtn').remove();
+					
+					// create buttons and div container
+					//$('#liste').children().remove($(this).context.id);
+					var temp = "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"//{"+"$(" + "'#liste'" + ").children().remove(" +'"'+$li.context.id+'")}'
+	
+					var $deleteBtn = $('<a>Delete</a>').attr(
+					{
+						'class': 'aDeleteBtn ui-btn-up-r',
+						'href': "javascript:deleteEmpl("+"'"+$(this).context.id+"'"+")"
+					}				
 					);
+				debug =$deleteBtn;
 				// insert swipe div into list item
-				debug = $li;
+				
 				$('#delta-' + $li.context.id).hide()	
 				$li.prepend($deleteBtn);
 				$('#liste').listview('refresh');
@@ -130,12 +136,9 @@ $( document ).live( 'pageinit',function(event)
 
 
 function createEmploye()
-{
-	var properties = {nom:"", email:"", casque:false, territoire:"Quï¿½bec", typeEmploye:"Interne",inspPrevues:0,
-			salaire:0, inspDelta:0, bonus:false, bottes:false, lunettes:false, remarque:"", telephone:""};
-	
-	var employe = {attached:true, nom:"", email:"", casque:false, territoire:"Quï¿½bec", typeEmploye:"Interne",inspPrevues:0,
-			salaire:0, inspDelta:0, bonus:false, bottes:false, lunettes:false, remarque:"", telephone:"", properties:properties};
+{	
+	var employe = {nom:"", email:"", casque:false, territoire:"Québec", typeEmploye:"Interne",inspPrevues:0,
+					salaire:0, inspDelta:0, bonus:false, bottes:false, lunettes:false, remarque:"", telephone:""};
 	
 	return employe;
 }
@@ -146,14 +149,10 @@ function deleteEmpl(e)
 
 	$('#liste').children().remove("li#"+e);
 	$('#liste').listview('refresh');
-	console.log(e, " ---- ",e.split("employe-li")  )
 	var index = e.split("employe-li")[1] ;
 	const pos = "employeJS_ind";
-	console.log("a");
 	var jr = JSON.stringify(employes.data[index]);	
-	console.log("b", index, " -- " , employes.data);
 	var myUrl = localStorage.getItem('url').concat("/api/employe/", index);
-	console.log("c ");
 	employes.data.pop(index);
 	jr = "".concat("{" + '"success"' +  ":true,"+ '"data"' + ":", jr, "}");
     $.ajax(
@@ -163,28 +162,27 @@ function deleteEmpl(e)
             	//data: jr,
                 success: function (i)
                 {
-                	console.log("success sync");
+                	//console.log("success sync");
                 },
-               
                 error: function (jqXHR,textStatus,errorThrown)
                 {
                 	debug = jqXHR;
-                    console.log("fail ",jqXHR);
-                    console.log("status ",textStatus);
-                    console.log("err ",errorThrown);
+                    //console.log("fail ",jqXHR);
+                    //console.log("status ",textStatus);
+                    //console.log("err ",errorThrown);
                 }
             } // fin argument ajax
        );//Fin Ajax
     	localStorage.setItem(pos , JSON.stringify(employes)); 
 
 }
-function DataCtrl()//$scope)
+function DataCtrl()
 {
 	var value;
 	const pos = "employeJS_ind";
-	value =	localStorage.getItem(pos);
-	if (value == null) 
-	{
+	/*value =	localStorage.getItem(pos);
+	if (value != null) 
+	{*/
 	    $.ajax(
 	            {
 	            	url: localStorage.getItem('url').concat("/api/employe/"),
@@ -198,6 +196,8 @@ function DataCtrl()//$scope)
 	                },
 	                error: function (jqXHR,textStatus,errorThrown)
 	                {
+	                	value =	localStorage.getItem(pos);
+	                	employes =  JSON.parse(value);
 	                    //console.log("fail ",jqXHR);
 	                    //console.log("status ",textStatus);
 	                   // console.log("err ",errorThrown);
@@ -206,12 +206,12 @@ function DataCtrl()//$scope)
 	          );//Fin Ajax
 	   	localStorage.setItem(pos , JSON.stringify(employes));   	
 	   	//console.log("loc storing: ", JSON.stringify(employes));
-	}
+	/*}
 	else 
 	{
 		employes =  JSON.parse(value);
 		//console.log("loc storage: ", employes);
-	}
+	}*/
 }//Fin DataCtrl
 
 function DataSync()
@@ -253,19 +253,21 @@ function DataSync()
 	{	
 		var myUrl = localStorage.getItem('url').concat("/api/employe");
 	
-		jr = "".concat("{" + '"success"' +  ":true,"+ '"data"' + ":", jr, "}");
+		jr = "".concat("{" + "success" +  ":true,"+ "data:", jr, "}");
 		//console.log("jr!: ",jr);
 		//console.log("url: ",myUrl);
 		
 	    $.ajax(
 	            {
 	            	type: "POST",
+	            	method: "POST",
 	            	url: myUrl,
 	            	data: jr,
+	            	contentType: 'application/json',
 	                success: function (i)
 	                {
 	                	//console.log("success sync");
-	                	console.log(i);
+	                	//console.log(i);
 	                },
 	               
 	                error: function (jqXHR,textStatus,errorThrown)
@@ -476,19 +478,6 @@ $("#suivi").live("pageshow", function(e, data)
 		}
 );
 
-function refreshPage() 
-{
-	console.log("IN refreshPage");
-	$.mobile.changePage(window.location.href,
-			{
-		allowSamePageTransition : true,
-		transition              : 'none',
-		showLoadMsg             : false,
-		reloadPage              : true
-			}
-		);
-}
-
 function checkConnection()
 {
 	//console.log("Connexion: " + navigator.connection);
@@ -522,5 +511,14 @@ function checkConnection()
 function updateUrl(value) 
 {
 	localStorage.setItem('url', value);
+}
+
+function reloadSuivi()
+{
+	DataCtrl();
+	document.location.reload();
+	document.location.href= "#suivi";
+	
+	
 }
 

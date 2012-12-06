@@ -33,7 +33,7 @@
 <div data-role="page" id="suivi">
 
 	<div data-role="header"  data-position="fixed">
-		<!--  <a href="#employeDetail" data-role="button" data-icon="plus" data-inline="true" data-iconpos="notext"></a> -->
+		<a href="#employeDetail" data-role="button" data-icon="plus" data-inline="true" data-iconpos="notext"></a>
 		<h1>Inspecteurs</h1>
 		<span class="right-button">
          	<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true"  >
@@ -108,7 +108,7 @@
 		<div data-role="footer" data-position="fixed">		
 		<div data-role="navbar"  >
 			<ul>
-				<li><a href="#suivi" data-icon="home"   >Inspecteurs</a></li>
+				<li><a href="#suivi" data-icon="home">Inspecteurs</a></li>
 				<li><a href="#config" data-icon="gear" class="ui-btn-active ui-state-persist">Configuration</a></li>
 			</ul>
 		</div><!-- /navbar -->
@@ -122,7 +122,8 @@
 <div data-role="page" id="employeDetail">
 	
 	<div data-role="header"  data-position="fixed" >
-		<a href="#suivi" data-icon="arrow-l">Inspecteurs</a>
+		<!--   <a href="#suivi" data-icon="arrow-l">Inspecteurs</a>-->
+		<a href="javascript:reloadSuivi()" data-icon="arrow-l">Inspecteurs</a>
 		<h1 id="titre"></h1>
 	</div><!-- /header -->
 
